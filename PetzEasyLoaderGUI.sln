@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetzEasyLoaderGUI", "PetzEasyLoaderGUI\PetzEasyLoaderGUI.csproj", "{4B017234-89FB-4B51-BFFA-B51AE6A0F8FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4B017234-89FB-4B51-BFFA-B51AE6A0F8FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B017234-89FB-4B51-BFFA-B51AE6A0F8FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B017234-89FB-4B51-BFFA-B51AE6A0F8FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B017234-89FB-4B51-BFFA-B51AE6A0F8FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FFA47E39-42DA-472C-A7F5-A00B5508B5E5}
+	EndGlobalSection
+EndGlobal

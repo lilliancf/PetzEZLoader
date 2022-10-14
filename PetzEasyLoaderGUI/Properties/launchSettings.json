@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PetzEasyLoaderGUI": {
+      "commandName": "Project",
+      "commandLineArgs": "settings"
+    }
+  }
+}
