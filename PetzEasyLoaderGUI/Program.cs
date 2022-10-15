@@ -18,6 +18,7 @@ namespace PetzEasyLoaderGUI
         static void Main(string[] args)
         {
             if (!Directory.Exists(fileSource)) generateFilesFolder();
+            if (!File.Exists("modify_settings.bat")) generateModifySettings();
             loadIniFile();
 
             if (showSettings || (args.Length > 0 && args[0] == "settings") || config.alwaysShowSettings
@@ -49,7 +50,7 @@ namespace PetzEasyLoaderGUI
             try { Process.Start(Path.Combine(config.petzDir, config.gameVersion)); }
             catch {
                 MessageBox.Show("Cannot launch Petz. The selected Petz or Babyz .exe is invalid, or some other error occured" +
-                                "\n\nTip: If your Petz exe is set to run as administrator, make sure you're also running PetzEasyLoader as administrator", "Error");
+                                "\n\nTip: If your Petz exe is set to run as administrator, make sure you're also running PetzEZLoader as administrator", "Error");
             }
         }
 
@@ -119,9 +120,15 @@ namespace PetzEasyLoaderGUI
             content.Add("include=" + config.listGetter(config.include));
             content.Add("exclude=" + config.listGetter(config.exclude));
 
-            string[] fileContent = content.ToArray();
+            File.WriteAllLines(configPath, content);
+        }
 
-            File.WriteAllLines(configPath, fileContent);
+        public static void generateModifySettings()
+        {
+            string dir = Path.Combine(Path.GetDirectoryName(fileSource), "modify_settings.bat");
+            string fileContent = "start PetzEZLoader.exe settings";
+
+            File.WriteAllText(dir, fileContent);
         }
 
         public static void generateFilesFolder()
@@ -138,6 +145,7 @@ namespace PetzEasyLoaderGUI
                 s.CreateSubdirectory("day");
                 s.CreateSubdirectory("night");
             }
+            saveIniFile();
         }
 
         static void loadSeasonalArea()
