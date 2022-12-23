@@ -9,4 +9,8 @@
     <AssemblyName>PetzEZLoader</AssemblyName>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="readme.html" />
+  </ItemGroup>
+
 </Project>

@@ -2,7 +2,11 @@ using Microsoft.VisualBasic;
 using System;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Security.Policy;
 using System.Text;
+using File = System.IO.File;
 
 namespace PetzEasyLoaderGUI
 {
@@ -37,7 +41,7 @@ namespace PetzEasyLoaderGUI
 
         static void startLoading()
         {
-            if (config.dayNightEnabled || config.seasonsEnabled)
+            if (config.sceneSwappingEnabled)
             {
                 loadSeasonalArea();
             }
@@ -68,7 +72,24 @@ namespace PetzEasyLoaderGUI
                         try
                         {
                             string[] kv = line.Split('=');
-                            config.strProp[kv[0]].SetProperty(kv[1]);
+                            if (kv[0].Equals("seasonsEnabled"))
+                            {
+                                config.strProp["sceneSwappingEnabled"].SetProperty(kv[1]);
+                            }
+                            else if (kv[0].Equals("dayNightEnabled")) 
+                            {
+                                string s = "false";
+                                if (!bool.Parse(kv[1]))
+                                {
+                                    s = "true";     
+                                }
+                                config.strProp["forceTimeEnabled"].SetProperty(s);
+                            } 
+                            else 
+                            {
+                                config.strProp[kv[0]].SetProperty(kv[1]);
+                            }
+
                         }
                         catch
                         {
@@ -106,15 +127,31 @@ namespace PetzEasyLoaderGUI
             content.Add("petzDir=" + config.petzDir);
             content.Add("gameVersion=" + config.gameVersion);
             content.Add("alwaysShowSettings=" + config.alwaysShowSettings);
+            content.Add("lastLoadDate=" + config.lastLoadDate);
+            content.Add("lastWeather=" + config.lastWeather);
+
             content.Add("[Seasonal Settings]");
-            content.Add("seasonsEnabled=" + config.seasonsEnabled);
-            content.Add("dayNightEnabled=" + config.dayNightEnabled);
+            content.Add("sceneSwappingEnabled=" + config.sceneSwappingEnabled);
+
+            content.Add("forceSeasonEnabled=" + config.forceSeasonEnabled);
+            content.Add("forceSeason=" + config.forceSeason);
             content.Add("winterStart=" + config.winterStart);
             content.Add("springStart=" + config.springStart);
             content.Add("summerStart=" + config.summerStart);
             content.Add("fallStart=" + config.fallStart);
+
+            content.Add("forceTimeEnabled=" + config.forceTimeEnabled);
+            content.Add("forceTime=" + config.forceTime);
+            content.Add("enableSunriseset=" + config.enableSunriseset);
             content.Add("sunriseTime=" + config.sunriseTime);
             content.Add("sunsetTime=" + config.sunsetTime);
+
+            content.Add("forceWeatherEnabled=" + config.forceWeatherEnabled);
+            content.Add("forceWeather=" + config.forceWeather);
+            content.Add("weatherRotation=" + config.weatherRotation);
+            content.Add("longitude=" + config.longitude);
+            content.Add("latitude=" + config.latitude);
+
             content.Add("[Bulk Content Settings]");
             content.Add("bulkLoadingEnabled=" + config.bulkLoadingEnabled);
             content.Add("include=" + config.listGetter(config.include));
@@ -140,10 +177,20 @@ namespace PetzEasyLoaderGUI
             seasons.Add(sa.CreateSubdirectory("spring"));
             seasons.Add(sa.CreateSubdirectory("summer"));
             seasons.Add(sa.CreateSubdirectory("fall"));
+            List<DirectoryInfo> times = new List<DirectoryInfo>();
             foreach (DirectoryInfo s in seasons)
             {
-                s.CreateSubdirectory("day");
-                s.CreateSubdirectory("night");
+                times.Add(s.CreateSubdirectory("day"));
+                times.Add(s.CreateSubdirectory("night"));
+                times.Add(s.CreateSubdirectory("sunrise"));
+                times.Add(s.CreateSubdirectory("sunset"));
+            }
+            foreach (DirectoryInfo t in times)
+            {
+                foreach(string weather in config.forceWeatherOptions)
+                {
+                    t.CreateSubdirectory(weather);
+                }
             }
             saveIniFile();
         }
@@ -154,34 +201,140 @@ namespace PetzEasyLoaderGUI
             if (Directory.Exists(seasonalAreaPath))
             {
                 DateTime dateTime = DateTime.Now;
+                int curDate = int.Parse(dateTime.ToString("MMdd"));
                 string curSeason = "summer";
-                if (config.seasonsEnabled)
+                if(config.forceSeasonEnabled)
+                {
+                    curSeason = config.forceSeason;
+                }
+                else
                 {
                     int winter = config.winterStart;
                     int spring = config.springStart;
                     int summer = config.summerStart;
-                    int fall   = config.fallStart;
+                    int fall = config.fallStart;
 
-                    int curDate = int.Parse(dateTime.ToString("MMdd"));
-
-                    if(isDateBetween(curDate, winter, spring)) curSeason = "winter";
-                    else if(isDateBetween(curDate, spring, summer)) curSeason = "spring";
+                    if (isDateBetween(curDate, winter, spring)) curSeason = "winter";
+                    else if (isDateBetween(curDate, spring, summer)) curSeason = "spring";
                     else if (isDateBetween(curDate, summer, fall)) curSeason = "summer";
-                    else   curSeason = "fall";
+                    else curSeason = "fall";
                 }
                 string curTime = "day";
-                if (config.dayNightEnabled)
+                if (config.forceTimeEnabled)
+                {
+                        curTime = config.forceTime;
+                }
+                else
                 {
                     int sunrise = config.sunriseTime;
                     int sunset = config.sunsetTime;
 
                     int curHour = Int32.Parse(dateTime.ToString("HHmm"));
-                    if (curHour < sunrise || curHour >= sunset )
+                    if (curHour < sunrise || curHour >= sunset)
                     {
                         curTime = "night";
                     }
-                }               
-                string seasonalPath = Path.Combine(seasonalAreaPath, curSeason, curTime);
+                    if (config.enableSunriseset)
+                    {
+                        if ((curHour/100) == (sunrise/100)) curTime = "sunrise";
+                        else if ((curHour/100) == (sunrise/100)) curTime = "sunset";
+                    }
+                }
+                string curWeather = "clear";
+                var random = new Random();
+                if (config.forceWeatherEnabled)
+                {
+                    curWeather = config.forceWeather;
+                }
+                else
+                {
+                    if (config.weatherRotation == "onload")
+                    {
+                        int id = random.Next(config.weatherRotationOptions.Count);
+                        curWeather = config.forceWeatherOptions[id];
+                    }
+                    else if (config.weatherRotation == "perday")
+                    {
+                        if (curDate != config.lastLoadDate)
+                        {
+                            int id = random.Next(config.weatherRotationOptions.Count);
+                            curWeather = config.forceWeatherOptions[id];
+
+                        }
+                        else
+                        {
+                            curWeather = config.lastWeather;
+                        }
+                    }
+                    else if (config.weatherRotation == "location")
+                    {
+                        int weatherCode = callWeatherApi(config.latitude, config.longitude);
+                        switch (weatherCode)
+                        {
+                            case 0:
+                            case 1:
+                                curWeather = "clear";
+                                break;
+                            case 2:
+                                curWeather = "cloudy";
+                                break;
+                            case 3:
+                            case 45:
+                            case 48:
+                                curWeather = "overcast";
+                                break;
+                            case 51:
+                            case 53:
+                            case 55:
+                            case 56:
+                            case 57:
+                            case 61:
+                            case 63:
+                            case 65:
+                            case 66:
+                            case 67:
+                            case 80:
+                            case 81:
+                            case 82:
+                                curWeather = "rain";
+                                break;
+                            case 71:
+                            case 73:
+                            case 75:
+                            case 77:
+                            case 85:
+                            case 86:
+                                curWeather = "snow";
+                                break;
+                            case 95:
+                            case 96:
+                            case 99:
+                                curWeather = "thunder";
+                                break;
+                            default:
+                                MessageBox.Show("Error connecting to Open Meteo Weather API, loading with last saved weather", "Error");
+                                curWeather = config.lastWeather;
+                                break;
+                        }
+                    }
+                    config.lastWeather = curWeather;
+                    config.lastLoadDate = curDate;
+                    saveIniFile();
+                }
+                string seasonalPath = Path.Combine(seasonalAreaPath, curSeason, curTime, curWeather);
+
+                // christmas easter egg
+                if ((curDate == 1225 || curDate == 1224))
+                {
+                    string xmasTime = curTime;
+                    if (curTime == "sunset" || curTime == "sunrise") xmasTime = "night";
+                    string xmasDay = Path.Combine(seasonalAreaPath, "winter", xmasTime, "christmas");
+                    if (Directory.Exists(xmasDay))
+                    {
+                        seasonalPath = xmasDay;
+                    }
+                }
+
                 string petzPath = Path.Combine(config.petzDir, "Resource", "Area");
                 if (Directory.Exists(seasonalPath))
                 {
@@ -191,23 +344,23 @@ namespace PetzEasyLoaderGUI
                         foreach (string file in sourceFiles)
                         {
                             string dest = Path.Combine(petzPath, Path.GetFileName(file));
-                            File.Copy(file, dest, true);
+                            System.IO.File.Copy(file, dest, true);
                         }
-
                     }
                     else
                     {
-                        MessageBox.Show("Can't find Resource\\Area in petz directory, loading without seasons", "Error");
+                        MessageBox.Show("Can't find Resource\\Area in petz directory, loading without swapping scenes", "Error");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Can't find SeasonalArea\\" + curSeason + "\\" + curTime + " directory, loading without seasons", "Error");
+                    MessageBox.Show("Can't find SeasonalArea\\" + curSeason + "\\" + curTime + "\\" + curWeather + " directory, loading without swapping scenes", "Error");
                 }
             }
             else
             {
-                MessageBox.Show("Can't find SeasonalArea directory, loading without seasons", "Error");
+                MessageBox.Show("Can't find SeasonalArea directory, loading without swapping scenes", "Error");
+                generateFilesFolder();
             }
         }
 
@@ -257,7 +410,6 @@ namespace PetzEasyLoaderGUI
         }
 
         static void removeFiles(List<string> filesToRemove)
-
         {
             string gamePath = Path.Combine(config.petzDir, "Resource");
             foreach (string file in filesToRemove)
@@ -270,7 +422,7 @@ namespace PetzEasyLoaderGUI
                     {
                         FileInfo fileInfo = new FileInfo(gameFile);
                         fileInfo.IsReadOnly = false;
-                        File.Delete(gameFile); 
+                        System.IO.File.Delete(gameFile); 
                     }
                 }
             }
@@ -307,5 +459,38 @@ namespace PetzEasyLoaderGUI
         {
             return File.ReadAllBytes(path1).SequenceEqual(File.ReadAllBytes(path2));
         }
+
+        static int callWeatherApi(double latitude, double longitude)
+        {
+            string URL = "https://api.open-meteo.com/v1/forecast";
+            string urlParameters = "?latitude=" + latitude + "&longitude=" + longitude + "&current_weather=true";
+
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(URL);
+
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = client.GetAsync(urlParameters).Result;
+            Console.WriteLine(response);
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content;
+                using (StreamReader sr = new StreamReader(data.ReadAsStream()))
+                {
+                    var s = sr.ReadLine();
+                    Console.WriteLine(s);
+                    return s.Split(new char[] {','}).Where(a => a.Contains("weathercode")).Select(a => a.Split(':').Last()).Select(a => int.Parse(a)).First();
+                }
+            }
+            else
+            {
+                return -1;
+            }
+
+        }
+
     }
+
+
 }

@@ -11,17 +11,31 @@ namespace PetzEasyLoaderGUI
         public string petzDir;
         public string gameVersion;
         public bool alwaysShowSettings;
+        public int lastLoadDate;
+        public string lastWeather;
 
-        public bool seasonsEnabled;
-        public bool dayNightEnabled;
+        public bool sceneSwappingEnabled;
+
+        public bool forceSeasonEnabled;
+        public string forceSeason;
 
         public int winterStart;
         public int springStart;
         public int summerStart;
         public int fallStart;
 
+        public bool forceTimeEnabled;
+        public string forceTime;
+        public bool enableSunriseset;
+
         public int sunriseTime;
         public int sunsetTime;
+
+        public bool forceWeatherEnabled;
+        public string forceWeather;
+        public string weatherRotation;
+        public double longitude;
+        public double latitude;
 
         public bool bulkLoadingEnabled;
 
@@ -29,6 +43,11 @@ namespace PetzEasyLoaderGUI
         public List<string> exclude;
 
         public Dictionary<string, Property> strProp = new Dictionary<string, Property>();
+
+        public List<string> forceSeasonOptions = new List<string>() { "winter", "spring", "summer", "fall" };
+        public List<string> forceWeatherOptions = new List<string>() { "clear", "cloudy", "overcast", "rain", "thunder", "snow" };
+        public List<string> weatherRotationOptions = new List<string>() { "onload", "perday", "location" };
+        public List<string> forceTimeOptions = new List<string>() { "day", "night", "sunrise", "sunset" };
 
         public class Property
         {
@@ -50,17 +69,29 @@ namespace PetzEasyLoaderGUI
             strProp.Add("petzDir", new Property((value) => directorySetter(out petzDir, value, "")));
             strProp.Add("gameVersion", new Property((value) => fileSetter(out gameVersion, value, ".exe", "")));
             strProp.Add("alwaysShowSettings", new Property((value) => boolSetter(out alwaysShowSettings, value, false)));
+            strProp.Add("lastLoadDate", new Property((value) => dateSetter(out lastLoadDate, value, (int.Parse(DateTime.Now.ToString("MMdd")) - 1))));
+            strProp.Add("lastWeather", new Property((value) => optionSetter(out lastWeather, value, forceWeatherOptions, "clear")));
 
-            strProp.Add("sunriseTime", new Property((value) => timeSetter(out sunriseTime, value, 700)));
-            strProp.Add("sunsetTime", new Property((value) => timeSetter(out sunsetTime, value, 1900)));
+            strProp.Add("sceneSwappingEnabled", new Property((value) => boolSetter(out sceneSwappingEnabled, value, false)));
 
+            strProp.Add("forceSeasonEnabled", new Property((value) => boolSetter(out forceSeasonEnabled, value, false)));
+            strProp.Add("forceSeason", new Property((value) => optionSetter(out forceSeason, value, forceSeasonOptions, "summer")));
             strProp.Add("winterStart", new Property((value) => dateSetter(out winterStart, value, 1201)));
             strProp.Add("springStart", new Property((value) => dateSetter(out springStart, value, 301)));
             strProp.Add("summerStart", new Property((value) => dateSetter(out summerStart, value, 601)));
             strProp.Add("fallStart", new Property((value) => dateSetter(out fallStart, value, 901)));
 
-            strProp.Add("seasonsEnabled", new Property((value) => boolSetter(out seasonsEnabled, value, false)));
-            strProp.Add("dayNightEnabled", new Property((value) => boolSetter(out dayNightEnabled, value, false)));
+            strProp.Add("forceTimeEnabled", new Property((value) => boolSetter(out forceTimeEnabled, value, false)));
+            strProp.Add("forceTime", new Property((value) => optionSetter(out forceTime, value, forceTimeOptions, "day")));
+            strProp.Add("enableSunriseset", new Property((value) => boolSetter(out enableSunriseset, value, false)));
+            strProp.Add("sunriseTime", new Property((value) => timeSetter(out sunriseTime, value, 700)));
+            strProp.Add("sunsetTime", new Property((value) => timeSetter(out sunsetTime, value, 1900)));
+
+            strProp.Add("forceWeatherEnabled", new Property((value) => boolSetter(out forceWeatherEnabled, value, false)));
+            strProp.Add("forceWeather", new Property((value) => optionSetter(out forceWeather, value, forceWeatherOptions, "clear")));
+            strProp.Add("weatherRotation", new Property((value) => optionSetter(out weatherRotation, value, weatherRotationOptions, "onload")));
+            strProp.Add("longitude", new Property((value) => coordSetter(out longitude, value, -122.4194)));
+            strProp.Add("latitude", new Property((value) => coordSetter(out latitude, value, 37.7749)));
 
             strProp.Add("bulkLoadingEnabled", new Property((value) => boolSetter(out bulkLoadingEnabled, value, false)));
 
@@ -73,23 +104,35 @@ namespace PetzEasyLoaderGUI
             petzDir = "";
             gameVersion = "";
             alwaysShowSettings = false;
+            lastLoadDate = (int.Parse(DateTime.Now.ToString("MMdd")) - 1);
+            lastWeather = "clear";
 
-            seasonsEnabled = false;
-            dayNightEnabled = false;
+            sceneSwappingEnabled = false;
 
-            bulkLoadingEnabled = false;
-
+            forceSeasonEnabled = false;
+            forceSeason = "summer";
             winterStart = 1201;
             springStart = 301;
             summerStart = 601;
             fallStart = 901;
 
+            forceTimeEnabled = false;
+            forceTime = "day";
+            enableSunriseset = false;
             sunriseTime = 600;
             sunsetTime = 1900;
 
+            forceWeatherEnabled = false;
+            forceWeather = "clear";
+            weatherRotation = "onload";
+            //default is San Franciso, P.F. Magic's HQ
+            longitude = 37.7749;
+            latitude = -122.4194;
+
+            bulkLoadingEnabled = false;
             include = new List<string>();
             exclude = new List<string>();
-        }
+    }
 
         void dateSetter (out int var, string value, int defaultValue)
         {
@@ -162,6 +205,19 @@ namespace PetzEasyLoaderGUI
             }
         }
 
+        void optionSetter(out string var, string value, List<string> options, string defaultValue)
+        {
+            if (options.Contains(value))
+            {
+                var = value;
+            }
+            else
+            {
+                var = defaultValue;
+                throw new Exception();
+            }
+        }
+
         void listSetter(List<string> var, string value, List<string> defaultValue)
         {
             if (string.IsNullOrEmpty(value))
@@ -183,6 +239,19 @@ namespace PetzEasyLoaderGUI
                     MessageBox.Show("Could not find the following folders: \n\n\t" + string.Join("\n\t", missingfolders) +
                     "\n\nAny missing folders have been skipped", "Error");
                 }
+            }
+        }
+
+        void coordSetter(out double var, string value, double defaultValue)
+        {
+            if (double.TryParse(value, out double num))
+            {
+                var = Math.Round(num, 4);
+            }
+            else
+            {
+                var = defaultValue;
+                throw new Exception();
             }
         }
 
