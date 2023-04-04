@@ -123,7 +123,7 @@ namespace PetzEasyLoaderGUI
             sunsetTime = 1900;
 
             forceWeatherEnabled = false;
-            forceWeather = "clear";
+            forceWeather = "clear"; 
             weatherRotation = "onload";
             //default is San Franciso, P.F. Magic's HQ
             longitude = 37.7749;
