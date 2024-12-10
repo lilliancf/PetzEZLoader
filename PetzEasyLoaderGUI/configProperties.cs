@@ -10,44 +10,65 @@ namespace PetzEasyLoaderGUI
     {
         public string petzDir;
         public string gameVersion;
+
         public bool alwaysShowSettings;
+
+        public bool openContProfForum;
+        public bool loadProfilesFirst;
+        public bool disableBaseGameFallback;
+
         public int lastLoadDate;
         public string lastWeather;
 
-        public bool sceneSwappingEnabled;
+        public bool autoSwappingEnabled; 
 
-        public bool forceSeasonEnabled;
-        public string forceSeason;
+        public bool seasonalAreaEnabled;
+        public bool seasonalCaseEnabled;
+        public bool seasonalMiceEnabled;
+        public string defaultSeason;
 
         public int winterStart;
         public int springStart;
         public int summerStart;
         public int fallStart;
 
-        public bool forceTimeEnabled;
-        public string forceTime;
-        public bool enableSunriseset;
+        public bool timeAreaEnabled;
+        public bool timeCaseEnabled;
+        public bool timeMiceEnabled;
+        public string defaultTime;
+
+        public bool caseMode24Hour; 
 
         public int sunriseTime;
         public int sunsetTime;
+        public bool enableSunriseset;
 
-        public bool forceWeatherEnabled;
-        public string forceWeather;
+        public bool weatherAreaEnabled;
+        public bool weatherCaseEnabled;
+        public bool weatherMiceEnabled;
+        public string defaultWeather;
+
         public string weatherRotation;
         public double longitude;
         public double latitude;
 
-        public bool bulkLoadingEnabled;
+        public bool contentProfilesEnabled;
+
+        public bool disableLoadingResources;
+        public bool disableLoadingPetz;
+        public bool disableLoadingPetzRez;
 
         public List<string> include;
         public List<string> exclude;
 
         public Dictionary<string, Property> strProp = new Dictionary<string, Property>();
 
-        public List<string> forceSeasonOptions = new List<string>() { "winter", "spring", "summer", "fall" };
-        public List<string> forceWeatherOptions = new List<string>() { "clear", "cloudy", "overcast", "rain", "thunder", "snow" };
+        public List<string> defaultSeasonOptions = new List<string>() { "winter", "spring", "summer", "fall" };
+        public List<string> defaultWeatherOptions = new List<string>() { "clear", "cloudy", "overcast", "rain", "thunder", "snow" };
         public List<string> weatherRotationOptions = new List<string>() { "onload", "perday", "location" };
-        public List<string> forceTimeOptions = new List<string>() { "day", "night", "sunrise", "sunset" };
+        public List<string> defaultTimeOptions = new List<string>() { "day", "night", "sunrise", "sunset" };
+
+
 
         public class Property
         {
@@ -68,32 +89,53 @@ namespace PetzEasyLoaderGUI
             SetToDefaults();
             strProp.Add("petzDir", new Property((value) => directorySetter(out petzDir, value, "")));
             strProp.Add("gameVersion", new Property((value) => fileSetter(out gameVersion, value, ".exe", "")));
+
             strProp.Add("alwaysShowSettings", new Property((value) => boolSetter(out alwaysShowSettings, value, false)));
+
+            strProp.Add("openContProfForum", new Property((value) => boolSetter(out openContProfForum, value, false)));
+            strProp.Add("loadProfilesFirst", new Property((value) => boolSetter(out loadProfilesFirst, value, false)));
+            strProp.Add("disableBaseGameFallback", new Property((value) => boolSetter(out disableBaseGameFallback, value, true)));
+
             strProp.Add("lastLoadDate", new Property((value) => dateSetter(out lastLoadDate, value, (int.Parse(DateTime.Now.ToString("MMdd")) - 1))));
-            strProp.Add("lastWeather", new Property((value) => optionSetter(out lastWeather, value, forceWeatherOptions, "clear")));
+            strProp.Add("lastWeather", new Property((value) => optionSetter(out lastWeather, value, defaultWeatherOptions, "clear")));
 
-            strProp.Add("sceneSwappingEnabled", new Property((value) => boolSetter(out sceneSwappingEnabled, value, false)));
+            strProp.Add("autoSwappingEnabled", new Property((value) => boolSetter(out autoSwappingEnabled, value, false)));
 
-            strProp.Add("forceSeasonEnabled", new Property((value) => boolSetter(out forceSeasonEnabled, value, false)));
-            strProp.Add("forceSeason", new Property((value) => optionSetter(out forceSeason, value, forceSeasonOptions, "summer")));
+            strProp.Add("defaultSeason", new Property((value) => optionSetter(out defaultSeason, value, defaultSeasonOptions, "summer")));
+            strProp.Add("seasonalAreaEnabled", new Property((value) => boolSetter(out seasonalAreaEnabled, value, false)));
+            strProp.Add("seasonalCaseEnabled", new Property((value) => boolSetter(out seasonalCaseEnabled, value, false)));
+            strProp.Add("seasonalMiceEnabled", new Property((value) => boolSetter(out seasonalMiceEnabled, value, false)));
+
             strProp.Add("winterStart", new Property((value) => dateSetter(out winterStart, value, 1201)));
             strProp.Add("springStart", new Property((value) => dateSetter(out springStart, value, 301)));
             strProp.Add("summerStart", new Property((value) => dateSetter(out summerStart, value, 601)));
             strProp.Add("fallStart", new Property((value) => dateSetter(out fallStart, value, 901)));
+;
+            strProp.Add("defaultTime", new Property((value) => optionSetter(out defaultTime, value, defaultTimeOptions, "day")));
+            strProp.Add("timeAreaEnabled", new Property((value) => boolSetter(out timeAreaEnabled, value, false)));
+            strProp.Add("timeCaseEnabled", new Property((value) => boolSetter(out timeCaseEnabled, value, false)));
+            strProp.Add("timeMiceEnabled", new Property((value) => boolSetter(out timeMiceEnabled, value, false)));
 
-            strProp.Add("forceTimeEnabled", new Property((value) => boolSetter(out forceTimeEnabled, value, false)));
-            strProp.Add("forceTime", new Property((value) => optionSetter(out forceTime, value, forceTimeOptions, "day")));
+            strProp.Add("caseMode24Hour", new Property((value) => boolSetter(out caseMode24Hour, value, false)));
+
             strProp.Add("enableSunriseset", new Property((value) => boolSetter(out enableSunriseset, value, false)));
             strProp.Add("sunriseTime", new Property((value) => timeSetter(out sunriseTime, value, 700)));
             strProp.Add("sunsetTime", new Property((value) => timeSetter(out sunsetTime, value, 1900)));
 
-            strProp.Add("forceWeatherEnabled", new Property((value) => boolSetter(out forceWeatherEnabled, value, false)));
-            strProp.Add("forceWeather", new Property((value) => optionSetter(out forceWeather, value, forceWeatherOptions, "clear")));
+            strProp.Add("defaultWeather", new Property((value) => optionSetter(out defaultWeather, value, defaultWeatherOptions, "clear")));
+            strProp.Add("weatherAreaEnabled", new Property((value) => boolSetter(out weatherAreaEnabled, value, false)));
+            strProp.Add("weatherCaseEnabled", new Property((value) => boolSetter(out weatherCaseEnabled, value, false)));
+            strProp.Add("weatherMiceEnabled", new Property((value) => boolSetter(out weatherMiceEnabled, value, false)));
+
             strProp.Add("weatherRotation", new Property((value) => optionSetter(out weatherRotation, value, weatherRotationOptions, "onload")));
             strProp.Add("longitude", new Property((value) => coordSetter(out longitude, value, -122.4194)));
             strProp.Add("latitude", new Property((value) => coordSetter(out latitude, value, 37.7749)));
 
-            strProp.Add("bulkLoadingEnabled", new Property((value) => boolSetter(out bulkLoadingEnabled, value, false)));
+            strProp.Add("contentProfilesEnabled", new Property((value) => boolSetter(out contentProfilesEnabled, value, false)));
+
+            strProp.Add("disableLoadingResources", new Property((value) => boolSetter(out disableLoadingResources, value, false)));
+            strProp.Add("disableLoadingPetz", new Property((value) => boolSetter(out disableLoadingPetz, value, true)));
+            strProp.Add("disableLoadingPetzRez", new Property((value) => boolSetter(out disableLoadingPetzRez, value, true)));
 
             strProp.Add("include", new Property((value) => listSetter(include, value, new List<string>())));
             strProp.Add("exclude", new Property((value) => listSetter(exclude, value, new List<string>())));
@@ -107,30 +149,50 @@ namespace PetzEasyLoaderGUI
             lastLoadDate = (int.Parse(DateTime.Now.ToString("MMdd")) - 1);
             lastWeather = "clear";
 
-            sceneSwappingEnabled = false;
+            autoSwappingEnabled = false;
 
-            forceSeasonEnabled = false;
-            forceSeason = "summer";
+            openContProfForum = false;
+            loadProfilesFirst = false;
+            disableBaseGameFallback = true;
+
+            seasonalAreaEnabled = false;
+            seasonalCaseEnabled = false;
+            seasonalMiceEnabled = false;
+            defaultSeason = "summer";
+
             winterStart = 1201;
             springStart = 301;
             summerStart = 601;
             fallStart = 901;
 
-            forceTimeEnabled = false;
-            forceTime = "day";
+            timeAreaEnabled = false;
+            timeCaseEnabled = false;
+            timeMiceEnabled = false;
+            defaultTime = "day";
+
+            caseMode24Hour = false;
+
             enableSunriseset = false;
             sunriseTime = 600;
             sunsetTime = 1900;
 
-            forceWeatherEnabled = false;
-            forceWeather = "clear"; 
+            weatherAreaEnabled = false;
+            weatherCaseEnabled = false;
+            weatherMiceEnabled = false;
+            defaultWeather = "clear"; 
+
             weatherRotation = "onload";
             //default is San Franciso, P.F. Magic's HQ
             longitude = 37.7749;
             latitude = -122.4194;
 
-            bulkLoadingEnabled = false;
-            include = new List<string>();
+            contentProfilesEnabled = false;
+
+            disableLoadingResources = false;
+            disableLoadingPetz = true;
+            disableLoadingPetzRez = true;
+
+        include = new List<string>();
             exclude = new List<string>();
     }
 
