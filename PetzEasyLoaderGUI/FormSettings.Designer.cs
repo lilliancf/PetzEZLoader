@@ -776,9 +776,9 @@
             // gbWarning
             // 
             gbWarning.Controls.Add(label10);
-            gbWarning.Location = new Point(5, 133);
+            gbWarning.Location = new Point(5, 134);
             gbWarning.Name = "gbWarning";
-            gbWarning.Size = new Size(552, 74);
+            gbWarning.Size = new Size(552, 73);
             gbWarning.TabIndex = 25;
             gbWarning.TabStop = false;
             gbWarning.Text = "WARNING";
@@ -1420,7 +1420,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(591, 515);
+            ClientSize = new Size(589, 515);
             Controls.Add(tabControl1);
             Controls.Add(btnSave);
             Controls.Add(btnStartPetz);

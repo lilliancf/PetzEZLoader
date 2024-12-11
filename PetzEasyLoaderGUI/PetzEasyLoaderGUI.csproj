@@ -12,6 +12,8 @@
 
   <ItemGroup>
     <None Remove="readme.html" />
+    <None Remove="Resources\petz14.png" />
+    <None Remove="Resources\petz5.png" />
   </ItemGroup>
 
   <ItemGroup>

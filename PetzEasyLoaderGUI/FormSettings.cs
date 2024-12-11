@@ -1,4 +1,6 @@
 using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.FileIO;
+using PetzEasyLoaderGUI.Properties;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
@@ -225,7 +227,7 @@ namespace PetzEasyLoaderGUI
         // INFO LINKS
         private void linkGithub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            this.linkAliveEnough.LinkVisited = true;
+            this.linkGithub.LinkVisited = true;
             System.Diagnostics.Process.Start("explorer.exe", "https://github.com/lilliancf/PetzEZLoader");
         }
         private void linkAliveEnough_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -600,18 +602,94 @@ namespace PetzEasyLoaderGUI
         private void cbDisableLoadingResources_CheckedChanged(object sender, EventArgs e)
         {
             config.disableLoadingResources = cbDisableLoadingResources.Checked;
+
+            if (cbDisableLoadingResources.Checked)
+            {
+                cbNpArea.Checked = false;
+                cbNpCatz.Checked = false;
+                cbNpClothes.Checked = false;
+                cbNpDogz.Checked = false;
+
+                cbNpSongz.Checked = false;
+                cbNpToyz.Checked = false;
+                cbNpWallpaper.Checked = false;
+
+                cbNpTextures.Checked = false;
+                cbNpPalettes.Checked = false;
+
+                cbNpArea.Enabled = false;
+                cbNpCatz.Enabled = false;
+                cbNpClothes.Enabled = false;
+                cbNpDogz.Enabled = false;
+
+                cbNpSongz.Enabled = false;
+                cbNpToyz.Enabled = false;
+                cbNpWallpaper.Enabled = false;
+
+                cbNpTextures.Enabled = false;
+                cbNpPalettes.Enabled = false;
+            }
+            else
+            {
+                cbNpArea.Enabled = true;
+                cbNpCatz.Enabled = true;
+                cbNpClothes.Enabled = true;
+                cbNpDogz.Enabled = true;
+
+                cbNpSongz.Enabled = true;
+                cbNpToyz.Enabled = true;
+                cbNpWallpaper.Enabled = true;
+
+                cbNpTextures.Enabled = true;
+                cbNpPalettes.Enabled = true;
+            }
+
             skipSave = false;
         }
 
         private void cbDisableLoadingPetz_CheckedChanged(object sender, EventArgs e)
         {
+            if (!cbDisableLoadingPetz.Checked)
+            {
+                MessageBox.Show("Note: Adopted Petz Content Profiles work best if each pet is placed in only one profile. \n\n" +
+                    "If the same pet file is placed in more than one profile, there is a risk that the latest version of the pet will not always be used.", "Info");
+            }
             config.disableLoadingPetz = cbDisableLoadingPetz.Checked;
+
+            if (cbDisableLoadingPetz.Checked)
+            {
+                cbNpAdoptedPetz.Enabled = false;
+                cbNpAdoptedPetz.Checked = false;
+            }
+            else
+            {
+                cbNpAdoptedPetz.Enabled = true;
+            }
+
             skipSave = false;
         }
 
         private void cbDisableLoadingPetzRez_CheckedChanged(object sender, EventArgs e)
         {
             config.disableLoadingPetzRez = cbDisableLoadingPetzRez.Checked;
+
+            if (cbDisableLoadingPetzRez.Checked)
+            {
+                cbNpACSprites.Checked = false;
+                cbNpMice.Checked = false;
+                cbNpCase.Checked = false;
+
+                cbNpACSprites.Enabled = false;
+                cbNpMice.Enabled = false;
+                cbNpCase.Enabled = false;
+            }
+            else
+            {
+                cbNpACSprites.Enabled = true;
+                cbNpMice.Enabled = true;
+                cbNpCase.Enabled = true;
+            }
+
             skipSave = false;
         }
 
@@ -691,7 +769,8 @@ namespace PetzEasyLoaderGUI
                     {
                         Program.deleteContentProfile(value);
                         string path = Path.Combine(Program.fileSource, "ContentProfiles", value);
-                        Directory.Delete(path, true);
+
+                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                         
                         updateContentProfiles();
 
