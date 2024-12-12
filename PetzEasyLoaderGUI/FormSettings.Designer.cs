@@ -795,7 +795,6 @@
             // cbOpenContProf
             // 
             cbOpenContProf.AutoSize = true;
-            cbOpenContProf.Enabled = false;
             cbOpenContProf.Location = new Point(7, 81);
             cbOpenContProf.Name = "cbOpenContProf";
             cbOpenContProf.Size = new Size(228, 19);
@@ -836,7 +835,6 @@
             // cbDisableFallback
             // 
             cbDisableFallback.AutoSize = true;
-            cbDisableFallback.Enabled = false;
             cbDisableFallback.Location = new Point(348, 33);
             cbDisableFallback.Margin = new Padding(2);
             cbDisableFallback.Name = "cbDisableFallback";
@@ -844,6 +842,7 @@
             cbDisableFallback.TabIndex = 20;
             cbDisableFallback.Text = "Disable Base Game File Fallback";
             cbDisableFallback.UseVisualStyleBackColor = true;
+            cbDisableFallback.CheckedChanged += cbDisableFallback_CheckedChanged;
             // 
             // btnRegenFolders
             // 

@@ -1,6 +1,7 @@
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
 using PetzEasyLoaderGUI.Properties;
+using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
@@ -170,6 +171,7 @@ namespace PetzEasyLoaderGUI
                         MessageBox.Show("Please select a valid Petz or Babyz .exe file");
                         break;
                 }
+                if (!Program.copyBaseGameBackupFolder(config.gameVersion)) fallbackError(config.gameVersion);
             }
         }
 
@@ -762,7 +764,7 @@ namespace PetzEasyLoaderGUI
             string value = ddDeleteProfile.SelectedItem.ToString();
             if (!string.IsNullOrEmpty(value))
             {
-                DialogResult result = MessageBox.Show("Are you sure you want to delete " + value + "? This action will delete the EZLoader folder as well as remove those files from your game.", "Warning", MessageBoxButtons.YesNo);
+                DialogResult result = MessageBox.Show("Are you sure you want to delete " + value + "? This action will delete both the EZLoader folder and the matching in game files from your PC.", "Warning", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
                     try
@@ -848,6 +850,23 @@ namespace PetzEasyLoaderGUI
             }
             Program.saveIniFile();
             skipSave = true;
+        }
+
+        private void cbDisableFallback_CheckedChanged(object sender, EventArgs e)
+        {
+            config.disableBaseGameFallback = cbDisableFallback.Checked;
+            if (!cbDisableFallback.Checked) {
+                if (!Program.copyBaseGameBackupFolder(config.gameVersion)) fallbackError(config.gameVersion);
+            }
+            skipSave = true;
+
+        }
+
+        private void fallbackError(string version)
+        {
+            MessageBox.Show("No backup folder for " + version + "found, disabling base game fallback", "Info");
+            config.disableBaseGameFallback = true;
+            cbDisableFallback.Checked = true;
         }
     }
 }

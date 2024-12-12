@@ -94,7 +94,7 @@ namespace PetzEasyLoaderGUI
 
             strProp.Add("openContProfForum", new Property((value) => boolSetter(out openContProfForum, value, false)));
             strProp.Add("loadProfilesFirst", new Property((value) => boolSetter(out loadProfilesFirst, value, false)));
-            strProp.Add("disableBaseGameFallback", new Property((value) => boolSetter(out disableBaseGameFallback, value, true)));
+            strProp.Add("disableBaseGameFallback", new Property((value) => boolSetter(out disableBaseGameFallback, value, false)));
 
             strProp.Add("lastLoadDate", new Property((value) => dateSetter(out lastLoadDate, value, (int.Parse(DateTime.Now.ToString("MMdd")) - 1))));
             strProp.Add("lastWeather", new Property((value) => optionSetter(out lastWeather, value, defaultWeatherOptions, "clear")));
@@ -153,7 +153,7 @@ namespace PetzEasyLoaderGUI
 
             openContProfForum = false;
             loadProfilesFirst = false;
-            disableBaseGameFallback = true;
+            disableBaseGameFallback = false;
 
             seasonalAreaEnabled = false;
             seasonalCaseEnabled = false;

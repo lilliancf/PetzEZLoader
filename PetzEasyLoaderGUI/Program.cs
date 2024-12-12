@@ -22,6 +22,7 @@ namespace PetzEasyLoaderGUI
     internal static class Program
     {
         public static string fileSource = Path.Combine(System.AppContext.BaseDirectory, "Filez");
+        public static string backupDirectory = Path.Combine(System.AppContext.BaseDirectory, "baseGameBackups");
         public static configProperties config = new configProperties();
 
         public static bool startPetz = true;
@@ -79,9 +80,8 @@ namespace PetzEasyLoaderGUI
                 startPetz = false;
                 ApplicationConfiguration.Initialize();
                 Application.Run(new FormSettings(config));
-               
             }
-            if (config.openContProfForum) Application.Run(new Form2());
+            if (config.openContProfForum) Application.Run(new FormContentProfiles(config));
             if (startPetz)
             {
                 startLoading();
@@ -133,8 +133,14 @@ namespace PetzEasyLoaderGUI
 
         static void loadContentProfiles()
         {
+            List<string> includeList = new List<string>(config.include);
+            if (!config.disableBaseGameFallback)
+            {
+                if (!Directory.Exists(Path.Combine(fileSource, "ContentProfiles", "baseGameBackup"))) copyBaseGameBackupFolder(config.gameVersion);
+                includeList = config.include.Prepend("baseGameBackup").ToList();
+            }
             //first load petz
-            if(!config.disableLoadingPetz)
+            if (!config.disableLoadingPetz)
             {
                 removePetzFromGame();
                 copyPetzToGame();
@@ -143,16 +149,17 @@ namespace PetzEasyLoaderGUI
             //then resource files
             if (!config.disableLoadingResources)
             {
+              
                 removeResourceFiles(mergeResourecFileFolders(config.exclude, false));
-                copyResourceFiles(mergeResourecFileFolders(config.include, true));
+                copyResourceFiles(mergeResourecFileFolders(includeList, true));
             }
 
             //then external dll stuff
             if (!config.disableLoadingPetzRez)
             {
-                loadLastResource("CarryingCase");
-                loadLastResource("ACSprites");
-                loadLastResource("Mice");
+                loadLastResource("CarryingCase", includeList);
+                loadLastResource("ACSprites", includeList);
+                loadLastResource("Mice", includeList);
             }
         }
 
@@ -482,6 +489,7 @@ namespace PetzEasyLoaderGUI
             }
             return curTime;
         }
+        
         static bool isDateBetween(int test, int start, int end)
         {
             if (start > end)
@@ -890,6 +898,7 @@ namespace PetzEasyLoaderGUI
             List<string> folders = new List<string>();
             DirectoryInfo df = new DirectoryInfo(Path.Combine(fileSource, "ContentProfiles"));
             Array.ForEach(df.GetDirectories(), (dir) => { folders.Add(dir.Name); });
+            if (folders.Contains("baseGameBackup")) folders.Remove("baseGameBackup");
             return folders;
         }
 
@@ -1167,13 +1176,13 @@ namespace PetzEasyLoaderGUI
         }
 
 
-        static void loadLastResource(string type)
+        static void loadLastResource(string type, List<string> includeList)
         {
             string gamePath = "";
             if (type.Equals("CarryingCase"))
                 gamePath = Path.Combine(config.petzDir, "Art", "Sprites", "Case");
             else if (type.Equals("ACSprites"))
-                gamePath = Path.Combine(config.petzDir, "Art", "Sprites", "AC");
+                gamePath = Path.Combine(config.petzDir, "Art", "Sprites", "Adpt");
             else if (type.Equals("Mice"))
                 gamePath = Path.Combine(config.petzDir, "PtzFiles", "Mouse");
             else
@@ -1182,7 +1191,7 @@ namespace PetzEasyLoaderGUI
             Directory.CreateDirectory(gamePath);
 
             string lastDir = "";
-            foreach (string profile in config.include)
+            foreach (string profile in includeList)
             {
                 string storagePath = Path.Combine(fileSource, "ContentProfiles", profile, type);
                 if (Directory.Exists(storagePath))
@@ -1352,14 +1361,23 @@ namespace PetzEasyLoaderGUI
                     
                 }
             }
-
-
             return copiedProfiles;
+        }
 
+        public static bool copyBaseGameBackupFolder(string file)
+        {
+            string version = file.Substring(0, file.Length - 4);
+            string backupPath = Path.Combine(backupDirectory, version);
+            if (Directory.Exists(backupPath)) {
+                string newPath = Path.Combine(fileSource, "ContentProfiles", "baseGameBackup");
+                if (Directory.Exists(newPath)) { 
+                    Directory.Delete(newPath, true);
+                }
+                Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(backupPath, newPath);
+                return true;
+            }
+            return false;
 
-        
         }
     }
-
-
 }
