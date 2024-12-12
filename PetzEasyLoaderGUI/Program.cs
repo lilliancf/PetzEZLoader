@@ -6,6 +6,7 @@ using System.ComponentModel.Design;
 using System.Configuration;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.DirectoryServices.ActiveDirectory;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -20,7 +21,7 @@ namespace PetzEasyLoaderGUI
 {
     internal static class Program
     {
-        public static string fileSource = Path.Combine(System.AppContext.BaseDirectory, "Files");
+        public static string fileSource = Path.Combine(System.AppContext.BaseDirectory, "Filez");
         public static configProperties config = new configProperties();
 
         public static bool startPetz = true;
@@ -34,7 +35,43 @@ namespace PetzEasyLoaderGUI
         {
             if (!Directory.Exists(fileSource)) generateFilesFolder();
             if (!File.Exists("modify_settings.bat")) generateModifySettings();
-            loadIniFile();
+
+            bool loaded = false;
+            string oldFilePath = Path.Combine(System.AppContext.BaseDirectory, "Files");
+            if (Directory.Exists(oldFilePath)) {
+                DialogResult result = MessageBox.Show("Petz EZLoader has dectected files from a previous version. Would you like to migrate your previous settings and bulk loading profiles?", "Info", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    List<string> profiles = migrateFromOldVersion();
+                    StringBuilder sb = new StringBuilder();
+                    if (profiles.Count > 0) {
+                        sb.Append("The following Bulk Loading folders have been migrated successfully: \n");
+                        foreach (string file in profiles)
+                        {
+                            sb.Append(file);
+                            sb.Append("\n");
+                        }
+                    }
+                    else
+                    {
+                        sb.Append("No bulk loading profiles found. \n");
+                    }
+                    sb.Append("Please manually move the files in your SeasonalArea folder and then delete the Files folder");
+
+                    MessageBox.Show(sb.ToString(), "Info");
+                    if (File.Exists(Path.Combine(oldFilePath, "config.ini"))) 
+                    {
+                        loadIniFile(oldFilePath);
+                        loaded = true;
+                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(
+                                Path.Combine(oldFilePath, "config.ini"),
+                                UIOption.OnlyErrorDialogs,
+                                RecycleOption.SendToRecycleBin);
+                    }
+                }
+            }
+            if (!loaded) loadIniFile(fileSource);
+
 
             if (showSettings || (args.Length > 0 && args[0] == "settings") || config.alwaysShowSettings
                 || string.IsNullOrEmpty(config.petzDir) || string.IsNullOrEmpty(config.gameVersion))
@@ -119,9 +156,9 @@ namespace PetzEasyLoaderGUI
             }
         }
 
-        static void loadIniFile()
-        {
-            string configPath = Path.Combine(fileSource, "config.ini");
+        static void loadIniFile(string loadPath)
+        { 
+            string configPath = Path.Combine(loadPath, "config.ini");
             if (File.Exists(configPath))
             {
                 List<string> errors = new List<string>();
@@ -1238,7 +1275,7 @@ namespace PetzEasyLoaderGUI
             string excludeFolderPath = Path.Combine(fileSource, "ContentProfiles", profile, "Adopted Petz");
 
            
-            if (Directory.Exists(excludeFolderPath))
+            if (Directory.Exists(excludeFolderPath) && Directory.Exists(gamePath))
             {
                 foreach (string fileToRemove in Directory.GetFiles(excludeFolderPath))
                 {
@@ -1287,6 +1324,40 @@ namespace PetzEasyLoaderGUI
             removeResourceFiles(mergeResourecFileFolders(list, false));
 
             //don't delete petzres resouces, they will get overwritten anyways
+        }
+
+        private static List<string> migrateFromOldVersion()
+        {
+            List<string> copiedProfiles = new List<string>();
+            string oldFileSource = Path.Combine(System.AppContext.BaseDirectory, "Files");
+            if (Directory.Exists(oldFileSource)) {
+                foreach (string dir in Directory.GetDirectories(oldFileSource)) {
+                    if (!dir.Equals("SeasonalArea")) { 
+                        string newDirName = Path.GetFileName(dir);
+                        string contentProfilesPath = Path.Combine(fileSource, "ContentProfiles");
+                        DirectoryInfo cpDirInfo = new DirectoryInfo(contentProfilesPath);
+                        if (!Directory.Exists(Path.Combine(contentProfilesPath, newDirName)))
+                        {
+                            DirectoryInfo newDirInfo = cpDirInfo.CreateSubdirectory(newDirName);
+                            newDirInfo.CreateSubdirectory("Resource");
+                            foreach (string subDir in Directory.GetDirectories(dir))
+                            {
+                                string newLocation = Path.Combine(contentProfilesPath, newDirName, "Resource", Path.GetFileName(subDir));
+                                Directory.Move(subDir, newLocation);
+                            }
+                            copiedProfiles.Add(newDirName);
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(dir, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        }
+                    }
+                    
+                }
+            }
+
+
+            return copiedProfiles;
+
+
+        
         }
     }
 

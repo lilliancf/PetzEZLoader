@@ -771,7 +771,7 @@ namespace PetzEasyLoaderGUI
                         string path = Path.Combine(Program.fileSource, "ContentProfiles", value);
 
                         Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(path, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
-                        
+
                         updateContentProfiles();
 
                         Program.saveIniFile();
@@ -849,7 +849,5 @@ namespace PetzEasyLoaderGUI
             Program.saveIniFile();
             skipSave = true;
         }
-
-
     }
 }
