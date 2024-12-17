@@ -278,14 +278,14 @@ namespace PetzEasyLoaderGUI
             }
         }
 
-        
+
         private void changeUI(string petz)
         {
             btnStartPetz.Text = "Save and Start " + petz;
             this.Text = petz + " EZLoader Settings";
 
         }
-        
+
         // PETZ SOURCE CONTROLS 
         private void bnEditPetzSource_Click(object sender, EventArgs e)
         {
@@ -909,7 +909,7 @@ namespace PetzEasyLoaderGUI
                 cbNpACSprites.Checked = false;
                 cbNpACSprites.Enabled = false;
             }
-            else 
+            else
             {
                 cbNpACSprites.Enabled = true;
             }
@@ -1090,7 +1090,5 @@ namespace PetzEasyLoaderGUI
             config.disableBaseGameFallback = true;
             cbDisableFallback.Checked = true;
         }
-
-
     }
 }
