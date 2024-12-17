@@ -265,6 +265,15 @@ namespace PetzEasyLoaderGUI
                 cbDisableLoadingAC.Enabled = false;
                 cbDisableLoadingAC.Checked = true;
                 config.disableLoadingAC = true;
+
+                cbNpACSprites.Enabled = false;
+                cbNpCase.Enabled = false;
+                cbNpMice.Enabled = false;
+
+                cbNpCatz.Enabled = false;
+                cbNpDogz.Enabled = false;
+                cbNpToyz.Enabled = false;
+                cbNpWallpaper.Enabled = false; 
             }
             else if (config.gameVersion.Equals("Petz 5.exe"))
             {
@@ -284,6 +293,8 @@ namespace PetzEasyLoaderGUI
             btnStartPetz.Text = "Save and Start " + petz;
             this.Text = petz + " EZLoader Settings";
 
+            cbNpAdoptedPetz.Text = "Include Adopted " + petz;
+            cbDisableLoadingPetz.Text = "Disable Loading Adopted " + petz;
         }
 
         // PETZ SOURCE CONTROLS 

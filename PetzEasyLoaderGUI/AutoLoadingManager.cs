@@ -359,7 +359,6 @@ namespace PetzEasyLoaderGUI
             }
         }
 
-     
 
         private int callWeatherApi(double latitude, double longitude)
         {

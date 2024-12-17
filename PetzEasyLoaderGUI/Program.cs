@@ -31,9 +31,6 @@ namespace PetzEasyLoaderGUI
         public static bool startPetz = true;
         static bool showSettings = false;
 
-        static string adoptedPetz = "Adopted Petz";
-        static string petExtension = ".pet";
-
         [STAThread]
         static void Main(string[] args)
         {

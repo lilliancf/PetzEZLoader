@@ -195,7 +195,7 @@
             // 
             // btnSave
             // 
-            btnSave.Location = new Point(373, 480);
+            btnSave.Location = new Point(368, 480);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(71, 23);
             btnSave.TabIndex = 16;
@@ -205,9 +205,9 @@
             // 
             // btnStartPetz
             // 
-            btnStartPetz.Location = new Point(450, 480);
+            btnStartPetz.Location = new Point(445, 480);
             btnStartPetz.Name = "btnStartPetz";
-            btnStartPetz.Size = new Size(127, 23);
+            btnStartPetz.Size = new Size(132, 23);
             btnStartPetz.TabIndex = 17;
             btnStartPetz.Text = "Save and Start Petz";
             btnStartPetz.UseVisualStyleBackColor = true;
@@ -387,7 +387,7 @@
             // cbEnableContProf
             // 
             cbEnableContProf.AutoSize = true;
-            cbEnableContProf.Location = new Point(7, 7);
+            cbEnableContProf.Location = new Point(3, 7);
             cbEnableContProf.Name = "cbEnableContProf";
             cbEnableContProf.Size = new Size(149, 19);
             cbEnableContProf.TabIndex = 10;
@@ -495,7 +495,7 @@
             // cbEnableAutoSwapping
             // 
             cbEnableAutoSwapping.AutoSize = true;
-            cbEnableAutoSwapping.Location = new Point(9, 8);
+            cbEnableAutoSwapping.Location = new Point(5, 5);
             cbEnableAutoSwapping.Name = "cbEnableAutoSwapping";
             cbEnableAutoSwapping.Size = new Size(145, 19);
             cbEnableAutoSwapping.TabIndex = 2;
@@ -1155,7 +1155,7 @@
             // cbNpMice
             // 
             cbNpMice.AutoSize = true;
-            cbNpMice.Location = new Point(146, 150);
+            cbNpMice.Location = new Point(171, 150);
             cbNpMice.Margin = new Padding(2);
             cbNpMice.Name = "cbNpMice";
             cbNpMice.Size = new Size(97, 19);

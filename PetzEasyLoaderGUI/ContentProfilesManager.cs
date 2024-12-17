@@ -1,8 +1,11 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PetzEasyLoaderGUI
@@ -28,13 +31,23 @@ namespace PetzEasyLoaderGUI
 
         public void removeExcludedFiles()
         {
-            if (!config.disableLoadingPetz) removePetzFromGame();
+            if (!config.disableLoadingPetz)
+            {
+                if (config.gameVersion.Equals("Babyz.exe")) removeBabyzFromGame();
+                else removePetzFromGame();
+            }
+
             if (!config.disableLoadingResources) removeResourceFiles(mergeResourecFileFolders(config.exclude, false));
         }
 
         public void addIncludedFiles()
         {
-            if (!config.disableLoadingPetz) copyPetzToGame();
+            if (!config.disableLoadingPetz)
+            {
+                if (config.gameVersion.Equals("Babyz.exe")) copyBabyzToGame();
+                else copyPetzToGame();
+            }
+
             if (!config.disableLoadingResources)  copyResourceFiles(mergeResourecFileFolders(config.include, true));
 
             List<string> includeList = new List<string>(config.include);
@@ -74,9 +87,31 @@ namespace PetzEasyLoaderGUI
                             }
                             mergedList.Add(resFile);
                         }
+                        mergedList = mergeSubDirectories(new List<string>(Directory.GetDirectories(resFolder)), removeDupes, mergedList);
                     }
                 }
 
+            }
+            return mergedList;
+        }
+
+        public List<string> mergeSubDirectories(List<string> folderPathsToMerge, bool removeDupes, List<string> mergedList)
+        {
+            foreach (string subFolder in folderPathsToMerge)
+            {
+                foreach (string resFile in Directory.GetFiles(subFolder))
+                {
+                    if (removeDupes)
+                    {
+                        IEnumerable<string> dupeFiles = mergedList.Where<string>(item => Path.GetFileName(item) == Path.GetFileName(resFile));
+                        foreach (string dupe in dupeFiles.ToList())
+                        {
+                            mergedList.Remove(dupe);
+                        }
+                    }
+                    mergedList.Add(resFile);
+                }
+                mergedList = mergeSubDirectories(new List<string>(Directory.GetDirectories(subFolder)), removeDupes, mergedList);
             }
             return mergedList;
         }
@@ -86,9 +121,12 @@ namespace PetzEasyLoaderGUI
             string gamePath = Path.Combine(config.petzDir, "Resource");
             foreach (string file in filesToRemove)
             {
-                string fileDir = Path.GetFileName(Path.GetDirectoryName(file));
+                string[] fileDirParts = Regex.Split(file, "Resource");
+                // remove / from front of string
+                string fileDir = fileDirParts[1].Substring(1);
+
                 string fileName = Path.GetFileName(file);
-                string gameFile = Path.Combine(gamePath, fileDir, fileName);
+                string gameFile = Path.Combine(gamePath, fileDir);
                 if (File.Exists(gameFile))
                 {
                     if (AreSameFile(file, gameFile))
@@ -99,6 +137,24 @@ namespace PetzEasyLoaderGUI
                     }
                 }
             }
+            DirectoryInfo gameDI = new DirectoryInfo(config.petzDir);
+            foreach (DirectoryInfo di in gameDI.GetDirectories())
+            {
+                cleanupSubFolders(di);
+            }
+
+        }
+
+        public void cleanupSubFolders(DirectoryInfo directory)
+        {
+            foreach (DirectoryInfo di in directory.GetDirectories())
+            {
+                cleanupSubFolders(di);
+            }
+            if(directory.GetFiles().Length == 0 && directory.GetDirectories().Length == 0)
+            {
+                directory.Delete();
+            }
         }
 
         public void copyResourceFiles(List<string> filesToCopy)
@@ -106,15 +162,17 @@ namespace PetzEasyLoaderGUI
             string gamePath = Path.Combine(config.petzDir, "Resource");
             foreach (string file in filesToCopy)
             {
-                string fileDir = Path.GetFileName(Path.GetDirectoryName(file));
+                string[] fileDirParts = Regex.Split(file, "Resource");
+                // remove / from front of string
+                string fileDir = fileDirParts[1].Substring(1);
 
-                if (!Directory.Exists(Path.Combine(gamePath, fileDir)))
+                string gameFile = Path.Combine(gamePath, fileDir);
+
+                if (!Directory.Exists(Path.GetDirectoryName(gameFile)))
                 {
-                    Directory.CreateDirectory(Path.Combine(gamePath, fileDir));
+                    Directory.CreateDirectory(Path.GetDirectoryName(gameFile));
                 }
-
-                string fileName = Path.GetFileName(file);
-                string gameFile = Path.Combine(gamePath, fileDir, fileName);
+ 
                 if (!(File.Exists(gameFile) && AreSameFile(file, gameFile)))
                 {
                     File.Copy(file, gameFile, true);
@@ -205,7 +263,7 @@ namespace PetzEasyLoaderGUI
                                         if (File.Exists(newStoragePath))
                                         {
                                             // if a pet with the new name exists in storage too, append guid
-                                            string guid = getGuid(possiblePet);
+                                            string guid = getPetGuid(possiblePet);
                                             newStoragePath = Path.Combine(excludeFolderPath, Path.GetFileNameWithoutExtension(possiblePet) + "-" + guid.Substring(0, 6) + ".pet");
                                         }
                                         File.Copy(possiblePet, newStoragePath, true);
@@ -270,7 +328,7 @@ namespace PetzEasyLoaderGUI
                                 else
                                 {
                                     //rename the pet in storage so if it's copied in no conflict
-                                    string guid = getGuid(petInStorage);
+                                    string guid = getPetGuid(petInStorage);
                                     petName = Path.GetFileNameWithoutExtension(petInStorage) + "-" + guid.Substring(0, 6) + ".pet";
                                     workingPetInStorage = Path.Combine(includeFolderPath, petName);
                                     File.Move(petInStorage, workingPetInStorage);
@@ -291,7 +349,7 @@ namespace PetzEasyLoaderGUI
                                         // if a pet with that name is already in storage, append guid to the name of the pet we're working with
                                         if (File.Exists(newStoragePath))
                                         {
-                                            string guid = getGuid(possiblePet);
+                                            string guid = getPetGuid(possiblePet);
                                             //append guid to in game name
                                             petName = Path.GetFileNameWithoutExtension(possiblePet) + "-" + guid.Substring(0, 6) + ".pet";
                                             newStoragePath = Path.Combine(includeFolderPath, petName);
@@ -332,12 +390,12 @@ namespace PetzEasyLoaderGUI
 
         bool comparePetz(string petPath1, string petPath2)
         {
-            string guid1 = getGuid(petPath1);
-            string guid2 = getGuid(petPath2);
+            string guid1 = getPetGuid(petPath1);
+            string guid2 = getPetGuid(petPath2);
             return guid1.Equals(guid2);
         }
 
-        string getGuid(string petFile)
+        string getPetGuid(string petFile)
         {
             byte[] petBytes = File.ReadAllBytes(petFile);
             byte[] pfmstr = Encoding.ASCII.GetBytes("PfMaGiCpEtZIII");
@@ -371,6 +429,18 @@ namespace PetzEasyLoaderGUI
 
         public void deleteContentProfile(string profile)
         {
+            if (config.gameVersion.Equals("Babyz.exe")) deleteProfileBabyz(profile);
+            else deleteProfilePetz(profile);
+
+            List<string> list = new List<string>();
+            list.Add(profile);
+            removeResourceFiles(mergeResourecFileFolders(list, false));
+
+            //don't delete petzres resouces, they will get overwritten anyways
+        }
+
+        void deleteProfilePetz(string profile)
+        {
             string gamePath = Path.Combine(config.petzDir, "Adopted Petz");
             string excludeFolderPath = Path.Combine(fileSource, "ContentProfiles", profile, "Adopted Petz");
 
@@ -380,7 +450,7 @@ namespace PetzEasyLoaderGUI
                 foreach (string fileToRemove in Directory.GetFiles(excludeFolderPath))
                 {
                     //if file is a pet do extra checks
-                    if (Path.GetExtension(fileToRemove).ToLower().Equals("pet"))
+                    if (Path.GetExtension(fileToRemove).ToLower().Equals(".pet"))
                     {
                         string petInGame = Path.Combine(gamePath, Path.GetFileName(fileToRemove));
                         bool foundPet = false;
@@ -400,7 +470,7 @@ namespace PetzEasyLoaderGUI
                             {
                                 if (Path.GetExtension(possiblePet).ToLower().Equals(".pet") && comparePetz(fileToRemove, possiblePet))
                                 {
-                                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(petInGame, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(possiblePet, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                                     break;
                                 }
                             }
@@ -418,13 +488,288 @@ namespace PetzEasyLoaderGUI
                     }
                 }
             }
-
-            List<string> list = new List<string>();
-            list.Add(profile);
-            removeResourceFiles(mergeResourecFileFolders(list, false));
-
-            //don't delete petzres resouces, they will get overwritten anyways
         }
 
+        void deleteProfileBabyz(string profile)
+        {
+            string adoptPath = Path.Combine(config.petzDir, "Adopted Babyz");
+            string grandmaPath = Path.Combine(config.petzDir, "Grandma's House");
+
+            string excludeFolderPath = Path.Combine(fileSource, "ContentProfiles", profile, "Adopted Babyz");
+            if (Directory.Exists(excludeFolderPath) && (Directory.Exists(adoptPath) || Directory.Exists(grandmaPath)))
+            {
+                foreach (string fileToRemove in Directory.GetFiles(excludeFolderPath))
+                {
+                    //if file is a baby do extra checks
+                    if (Path.GetExtension(fileToRemove).ToLower().Equals(".baby"))
+                    {
+                        string babyInAdopt = Path.Combine(adoptPath, Path.GetFileName(fileToRemove));
+                        string babyGrandma = Path.Combine(grandmaPath, Path.GetFileName(fileToRemove));
+
+                        bool foundBaby = false;
+                        //if pet with same name exists check that one first
+                        if (File.Exists(babyInAdopt))
+                        {
+                            if (compareBabyz(fileToRemove, babyInAdopt))
+                            {
+                                //if we found it, then send to the bin
+                                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(babyInAdopt, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                                foundBaby = true;
+                            }
+                        }
+                        //if pet with same name exists check that one first
+                        if (!foundBaby && File.Exists(babyGrandma))
+                        {
+                            if (compareBabyz(fileToRemove, babyGrandma))
+                            {
+                                //if we found it, then send to the bin
+                                Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(babyGrandma, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                                foundBaby = true;
+                            }
+                        }
+                        if (!foundBaby)
+                        {
+                            List<string> babyLoactionList = new List<string>(Directory.GetFiles(adoptPath));
+                            babyLoactionList.AddRange(Directory.GetFiles(grandmaPath));
+                            // if we haven't found it check every pet
+                            foreach (string possiblePet in babyLoactionList)
+                            {
+                                if (Path.GetExtension(possiblePet).ToLower().Equals(".baby") && compareBabyz(fileToRemove, possiblePet))
+                                {
+                                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(possiblePet, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+                    else //if it's not a pet just delete it
+                    {
+                        string fileInGame = Path.Combine(adoptPath, Path.GetFileName(fileToRemove));
+                        if (File.Exists(fileInGame))
+                        {
+                            FileInfo fileInfo = new FileInfo(fileInGame);
+                            fileInfo.IsReadOnly = false;
+                            File.Delete(fileInGame);
+                        }
+                    }
+                }
+            }
+        }
+
+        void copyBabyzToGame()
+        {
+            string adoptPath = Path.Combine(config.petzDir, "Adopted Babyz");
+            string grandmaPath = Path.Combine(config.petzDir, "Grandma's House");
+            foreach (string iFolder in config.include)
+            {
+                string includeFolderPath = Path.Combine(fileSource, "ContentProfiles", iFolder, "Adopted Babyz");
+                if (Directory.Exists(includeFolderPath))
+                {
+                    foreach (string babyInStorage in Directory.GetFiles(includeFolderPath))
+                    {
+                        //if baby, we gotta do lots of checks
+                        if (Path.GetExtension(babyInStorage).Equals(".baby"))
+                        {
+                            bool matchFound = false;
+
+                            string babyInAdopt = Path.Combine(adoptPath, Path.GetFileName(babyInStorage)); ;
+                            string babyGrandma = Path.Combine(grandmaPath, Path.GetFileName(babyInStorage)); ; 
+
+                            string workingBabyInStorage = babyInStorage;
+                            string babyName = Path.GetFileName(babyInStorage);
+
+                            if (File.Exists(babyInAdopt))
+                            {
+                                // check if they are actually the same baby
+                                if (compareBabyz(babyInAdopt, babyInStorage))
+                                {
+                                    matchFound = true;
+                                }
+                                else
+                                {
+                                    //rename the baby in storage so if it's copied in no conflict
+                                    string guid = getPetGuid(babyInStorage);
+                                    babyName = Path.GetFileNameWithoutExtension(babyInStorage) + "-" + guid.Substring(0, 6) + ".pet";
+                                    workingBabyInStorage = Path.Combine(includeFolderPath, babyName);
+                                    File.Move(babyInStorage, workingBabyInStorage);
+                                }
+                            }
+                            if (!matchFound && File.Exists(babyInAdopt))
+                            {
+                                if (compareBabyz(babyInAdopt, babyInStorage))
+                                {
+                                    matchFound = true;
+                                }
+                                else
+                                {
+                                    string guid = getPetGuid(babyInStorage);
+                                    babyName = Path.GetFileNameWithoutExtension(babyInStorage) + "-" + guid.Substring(0, 6) + ".pet";
+                                    workingBabyInStorage = Path.Combine(includeFolderPath, babyName);
+                                    File.Move(babyInStorage, workingBabyInStorage);
+                                }
+                            }
+                            // if we didn't match, check all the babyz
+                            if (!matchFound)
+                            {
+                                List<string> babyLoactionList = new List<string>(Directory.GetFiles(adoptPath));
+                                babyLoactionList.AddRange(Directory.GetFiles(grandmaPath));
+
+                                foreach (string possibleBaby in babyLoactionList)
+                                {
+                                    if (compareBabyz(workingBabyInStorage, possibleBaby))
+                                    {
+                                        // we found a match with a different name, update the name in storage
+                                        string newStoragePath = Path.Combine(includeFolderPath, Path.GetFileName(possibleBaby));
+                                        babyName = Path.GetFileName(possibleBaby);
+
+                                        // if a pet with that name is already in storage, append guid to the name of the pet we're working with
+                                        if (File.Exists(newStoragePath))
+                                        {
+                                            string guid = getPetGuid(possibleBaby);
+                                            //append guid to in game name
+                                            babyName = Path.GetFileNameWithoutExtension(possibleBaby) + "-" + guid.Substring(0, 6) + ".baby";
+                                            newStoragePath = Path.Combine(includeFolderPath, babyName);
+                                            // rename the pet in game
+                                            File.Move(possibleBaby, Path.Combine(Path.GetDirectoryName(possibleBaby), babyName));
+                                            // delete the old pet in storage
+                                            File.Delete(workingBabyInStorage);
+                                            workingBabyInStorage = newStoragePath;
+                                        }
+                                        // copy the pet with the new name into storage
+                                        File.Copy(Path.Combine(Path.GetDirectoryName(possibleBaby), babyName), newStoragePath, true);
+
+                                        matchFound = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            //still no match, copy the pet in
+                            if (!matchFound)
+                            {
+                                File.Copy(workingBabyInStorage, Path.Combine(adoptPath, babyName), false);
+                            }
+                        }
+                        else
+                        {
+                            //otherwise just check if it's not there and if not copy it
+                            string gameFile = Path.Combine(adoptPath, Path.GetFileName(babyInStorage));
+                            if (!(File.Exists(gameFile) && AreSameFile(babyInStorage, gameFile)))
+                            {
+                                File.Copy(babyInStorage, gameFile, true);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        void removeBabyzFromGame()
+        {
+            string adoptPath = Path.Combine(config.petzDir, "Adopted Babyz");
+            string grandmaPath = Path.Combine(config.petzDir, "Grandma's House");
+            foreach (string eFolder in config.exclude)
+            {
+                string excludeFolderPath = Path.Combine(fileSource, "ContentProfiles", eFolder, "Adopted Babyz");
+                if (Directory.Exists(excludeFolderPath))
+                {
+                    foreach (string fileToRemove in Directory.GetFiles(excludeFolderPath))
+                    {
+                        //if file is a baby, copy back into folder
+                        if (Path.GetExtension(fileToRemove).ToLower().Equals(".baby"))
+                        {
+                            bool foundBaby = false;
+
+                            string babyInAdopt = Path.Combine(adoptPath, Path.GetFileName(fileToRemove));
+                            string babyGrandma = Path.Combine(grandmaPath, Path.GetFileName(fileToRemove));
+                            
+                            //check adopt
+                            if (File.Exists(babyInAdopt))
+                            {
+                                if (compareBabyz(fileToRemove, babyInAdopt))
+                                {
+                                    //if same, copy pet to folder then delete pet in game
+                                    File.Copy(babyInAdopt, fileToRemove, true);
+
+                                    FileInfo fileInfo = new FileInfo(babyInAdopt);
+                                    fileInfo.IsReadOnly = false;
+                                    File.Delete(babyInAdopt);
+                                    foundBaby = true;
+                                }
+                            }
+
+                            //check grandma
+                            if (!foundBaby && File.Exists(babyGrandma))
+                            {
+                                if (compareBabyz(fileToRemove, babyGrandma))
+                                {
+                                    //if same, copy pet to folder then delete pet in game
+                                    File.Copy(babyGrandma, fileToRemove, true);
+
+                                    FileInfo fileInfo = new FileInfo(babyGrandma);
+                                    fileInfo.IsReadOnly = false;
+                                    File.Delete(babyGrandma);
+                                    foundBaby = true;
+                                }
+                            }
+                            
+                            if (!foundBaby)
+                            {
+                                // if we haven't found it check every baby
+                                List<string> babyLoactionList = new List<string>(Directory.GetFiles(adoptPath));
+                                babyLoactionList.AddRange(Directory.GetFiles(grandmaPath));
+
+                                foreach (string possibleBaby in babyLoactionList)
+                                {
+                                    if (Path.GetExtension(possibleBaby).ToLower().Equals(".baby") && compareBabyz(fileToRemove, possibleBaby))
+                                    {
+                                        // if we find it, copy pet back into folder with new name
+                                        string newStoragePath = Path.Combine(excludeFolderPath, Path.GetFileName(possibleBaby));
+                                        if (File.Exists(newStoragePath))
+                                        {
+                                            // if a pet with the new name exists in storage too, append guid
+                                            string guid = getPetGuid(possibleBaby);
+                                            newStoragePath = Path.Combine(excludeFolderPath, Path.GetFileNameWithoutExtension(possibleBaby) + "-" + guid.Substring(0, 6) + ".baby");
+                                        }
+                                        File.Copy(possibleBaby, newStoragePath, true);
+
+                                        // delete the old name pet from storage
+                                        FileInfo fileInfo = new FileInfo(fileToRemove);
+                                        fileInfo.IsReadOnly = false;
+                                        File.Delete(fileToRemove); ;
+
+                                        // and delete pet with new name from game
+                                        FileInfo fileInfo2 = new FileInfo(possibleBaby);
+                                        fileInfo2.IsReadOnly = false;
+                                        File.Delete(possibleBaby);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else //if it's not a baby just delete it
+                        {
+                            string fileInGame = Path.Combine(adoptPath, Path.GetFileName(fileToRemove));
+                            if (File.Exists(fileInGame))
+                            {
+                                FileInfo fileInfo = new FileInfo(fileInGame);
+                                fileInfo.IsReadOnly = false;
+                                File.Delete(fileInGame);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        bool compareBabyz(string babyPath1, string babyPath2)
+        {
+            //string guid1 = getPetGuid(babyPath1);
+            //string guid2 = getPetGuid(babyPath2);
+            //return guid1.Equals(guid2);
+
+            return Path.GetFileName(babyPath1).Equals(Path.GetFileName(babyPath2));
+        }
     }
 }
