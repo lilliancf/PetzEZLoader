@@ -23,6 +23,7 @@ namespace PetzEasyLoaderGUI
         public bool autoSwappingEnabled; 
 
         public bool seasonalAreaEnabled;
+        public bool seasonalACEnabled;
         public bool seasonalCaseEnabled;
         public bool seasonalMiceEnabled;
         public string defaultSeason;
@@ -33,6 +34,7 @@ namespace PetzEasyLoaderGUI
         public int fallStart;
 
         public bool timeAreaEnabled;
+        public bool timeACEnabled;
         public bool timeCaseEnabled;
         public bool timeMiceEnabled;
         public string defaultTime;
@@ -44,6 +46,7 @@ namespace PetzEasyLoaderGUI
         public bool enableSunriseset;
 
         public bool weatherAreaEnabled;
+        public bool weatherACEnabled;
         public bool weatherCaseEnabled;
         public bool weatherMiceEnabled;
         public string defaultWeather;
@@ -56,7 +59,11 @@ namespace PetzEasyLoaderGUI
 
         public bool disableLoadingResources;
         public bool disableLoadingPetz;
-        public bool disableLoadingPetzRez;
+
+        public bool disableLoadingCase;
+        public bool disableLoadingMice;
+        public bool disableLoadingAC;
+
 
         public List<string> include;
         public List<string> exclude;
@@ -103,6 +110,7 @@ namespace PetzEasyLoaderGUI
 
             strProp.Add("defaultSeason", new Property((value) => optionSetter(out defaultSeason, value, defaultSeasonOptions, "summer")));
             strProp.Add("seasonalAreaEnabled", new Property((value) => boolSetter(out seasonalAreaEnabled, value, false)));
+            strProp.Add("seasonalACEnabled", new Property((value) => boolSetter(out seasonalACEnabled, value, false)));
             strProp.Add("seasonalCaseEnabled", new Property((value) => boolSetter(out seasonalCaseEnabled, value, false)));
             strProp.Add("seasonalMiceEnabled", new Property((value) => boolSetter(out seasonalMiceEnabled, value, false)));
 
@@ -113,6 +121,7 @@ namespace PetzEasyLoaderGUI
 ;
             strProp.Add("defaultTime", new Property((value) => optionSetter(out defaultTime, value, defaultTimeOptions, "day")));
             strProp.Add("timeAreaEnabled", new Property((value) => boolSetter(out timeAreaEnabled, value, false)));
+            strProp.Add("timeACEnabled", new Property((value) => boolSetter(out timeACEnabled, value, false)));
             strProp.Add("timeCaseEnabled", new Property((value) => boolSetter(out timeCaseEnabled, value, false)));
             strProp.Add("timeMiceEnabled", new Property((value) => boolSetter(out timeMiceEnabled, value, false)));
 
@@ -124,6 +133,7 @@ namespace PetzEasyLoaderGUI
 
             strProp.Add("defaultWeather", new Property((value) => optionSetter(out defaultWeather, value, defaultWeatherOptions, "clear")));
             strProp.Add("weatherAreaEnabled", new Property((value) => boolSetter(out weatherAreaEnabled, value, false)));
+            strProp.Add("weatherACEnabled", new Property((value) => boolSetter(out weatherACEnabled, value, false)));
             strProp.Add("weatherCaseEnabled", new Property((value) => boolSetter(out weatherCaseEnabled, value, false)));
             strProp.Add("weatherMiceEnabled", new Property((value) => boolSetter(out weatherMiceEnabled, value, false)));
 
@@ -135,7 +145,10 @@ namespace PetzEasyLoaderGUI
 
             strProp.Add("disableLoadingResources", new Property((value) => boolSetter(out disableLoadingResources, value, false)));
             strProp.Add("disableLoadingPetz", new Property((value) => boolSetter(out disableLoadingPetz, value, true)));
-            strProp.Add("disableLoadingPetzRez", new Property((value) => boolSetter(out disableLoadingPetzRez, value, true)));
+
+            strProp.Add("disableLoadingCase", new Property((value) => boolSetter(out disableLoadingCase, value, true)));
+            strProp.Add("disableLoadingMice", new Property((value) => boolSetter(out disableLoadingMice, value, true)));
+            strProp.Add("disableLoadingAC", new Property((value) => boolSetter(out disableLoadingAC, value, true)));
 
             strProp.Add("include", new Property((value) => listSetter(include, value, new List<string>())));
             strProp.Add("exclude", new Property((value) => listSetter(exclude, value, new List<string>())));
@@ -156,6 +169,7 @@ namespace PetzEasyLoaderGUI
             disableBaseGameFallback = false;
 
             seasonalAreaEnabled = false;
+            seasonalACEnabled = false;
             seasonalCaseEnabled = false;
             seasonalMiceEnabled = false;
             defaultSeason = "summer";
@@ -166,6 +180,7 @@ namespace PetzEasyLoaderGUI
             fallStart = 901;
 
             timeAreaEnabled = false;
+            timeACEnabled = false;
             timeCaseEnabled = false;
             timeMiceEnabled = false;
             defaultTime = "day";
@@ -177,6 +192,7 @@ namespace PetzEasyLoaderGUI
             sunsetTime = 1900;
 
             weatherAreaEnabled = false;
+            weatherACEnabled = false;
             weatherCaseEnabled = false;
             weatherMiceEnabled = false;
             defaultWeather = "clear"; 
@@ -190,9 +206,11 @@ namespace PetzEasyLoaderGUI
 
             disableLoadingResources = false;
             disableLoadingPetz = true;
-            disableLoadingPetzRez = true;
+            disableLoadingCase = true;
+            disableLoadingMice = true;
+            disableLoadingAC = true;
 
-        include = new List<string>();
+            include = new List<string>();
             exclude = new List<string>();
     }
 
@@ -288,7 +306,7 @@ namespace PetzEasyLoaderGUI
             }
             else
             {
-                List<string> folders = Program.getFolders();
+                List<string> folders = Program.getContentProfileFolders();
                 List<string> missingfolders = new List<string>();
                 string[] loadedFolders = value.Split(",");
                 foreach (string l in loadedFolders)
@@ -324,7 +342,7 @@ namespace PetzEasyLoaderGUI
 
         public void refreshFolders()
         {
-            List<string> lists = Program.getFolders();
+            List<string> lists = Program.getContentProfileFolders();
 
             include.RemoveAll((s) => !(lists.Contains(s) || exclude.Contains(s)));
             exclude.RemoveAll((s) => !(lists.Contains(s) || include.Contains(s)));

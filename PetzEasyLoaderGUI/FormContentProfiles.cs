@@ -131,7 +131,7 @@ namespace PetzEasyLoaderGUI
             }
         }
 
-        private void btnHelp_Click(object sender, EventArgs e)
+        private void bnHelp_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("explorer.exe", @"readme.html");
         }

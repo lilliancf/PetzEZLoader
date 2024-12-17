@@ -4,6 +4,7 @@ using PetzEasyLoaderGUI.Properties;
 using System;
 using System.Configuration;
 using System.Diagnostics;
+using System.Drawing.Design;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -16,8 +17,11 @@ namespace PetzEasyLoaderGUI
     {
         configProperties config;
         bool skipSave = false;
+
         public FormSettings(configProperties p)
         {
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             config = p;
             InitializeComponent();
 
@@ -32,6 +36,9 @@ namespace PetzEasyLoaderGUI
             loadGeneralSettings();
             loadAutoSwappingSettings();
             loadContentProfileSettings();
+
+            if (config.gameVersion.Equals("Babyz.exe")) changeUI("Babyz");
+            else changeUI("Petz");
         }
 
 
@@ -66,8 +73,6 @@ namespace PetzEasyLoaderGUI
 
         private void loadAutoSwappingSettings()
         {
-            List<string> errors = new List<string>();
-
             // setup autoswapping 
             cbEnableAutoSwapping.Checked = config.autoSwappingEnabled;
             toggleAutoSwappingControls(config.autoSwappingEnabled);
@@ -76,6 +81,14 @@ namespace PetzEasyLoaderGUI
             ddDefaultSeason.SelectedIndex = ddDefaultSeason.FindString(config.defaultSeason);
 
             cbEnableSeasonalArea.Checked = config.seasonalAreaEnabled;
+            cbEnableSeasonalAC.Checked = config.seasonalACEnabled;
+            if (!config.seasonalAreaEnabled)
+            {
+                cbEnableSeasonalAC.Checked = false;
+                cbEnableSeasonalAC.Enabled = false;
+                config.seasonalACEnabled = false;
+            }
+
             cbEnableSeasonalCase.Checked = config.seasonalCaseEnabled;
             cbEnableSeasonalMice.Checked = config.seasonalMiceEnabled;
 
@@ -89,6 +102,14 @@ namespace PetzEasyLoaderGUI
             ddDefaultTime.SelectedIndex = ddDefaultTime.FindString(config.defaultTime);
 
             cbEnableTimeArea.Checked = config.timeAreaEnabled;
+            cbEnableTimeAC.Checked = config.timeACEnabled;
+            if (!config.timeAreaEnabled)
+            {
+                cbEnableTimeAC.Checked = false;
+                cbEnableTimeAC.Enabled = false;
+                config.timeACEnabled = false;
+            }
+
             cbEnableTimeCase.Checked = config.timeCaseEnabled;
             cbEnableTimeMice.Checked = config.timeMiceEnabled;
 
@@ -109,6 +130,14 @@ namespace PetzEasyLoaderGUI
             ddDefaultWeather.SelectedIndex = ddDefaultWeather.FindString(config.defaultWeather);
 
             cbEnableWeatherArea.Checked = config.weatherAreaEnabled;
+            cbEnableWeatherAC.Checked = config.weatherACEnabled;
+            if (!config.weatherAreaEnabled)
+            {
+                cbEnableWeatherAC.Checked = false;
+                cbEnableWeatherAC.Enabled = false;
+                config.weatherACEnabled = false;
+            }
+
             cbEnableWeatherCase.Checked = config.weatherCaseEnabled;
             cbEnableWeatherMice.Checked = config.weatherMiceEnabled;
 
@@ -126,6 +155,82 @@ namespace PetzEasyLoaderGUI
             }
             ddWeatherRotation.SelectedIndex = ddWeatherRotation.FindString(str);
 
+            if (config.gameVersion.Equals("Babyz.exe"))
+            {
+                cbEnableSeasonalAC.Checked = false;
+                cbEnableSeasonalAC.Enabled = false;
+                config.seasonalACEnabled = false;
+
+                cbEnableSeasonalCase.Checked = false;
+                cbEnableSeasonalCase.Enabled = false;
+                config.seasonalCaseEnabled = false;
+
+                cbEnableSeasonalMice.Checked = false;
+                cbEnableSeasonalMice.Enabled = false;
+                config.seasonalMiceEnabled = false;
+
+
+                cbEnableTimeAC.Checked = false;
+                cbEnableTimeAC.Enabled = false;
+                config.timeACEnabled = false;
+
+                cbEnableTimeCase.Checked = false;
+                cbEnableTimeCase.Enabled = false;
+                config.timeCaseEnabled = false;
+
+                cbEnableTimeMice.Checked = false;
+                cbEnableTimeMice.Enabled = false;
+                config.timeMiceEnabled = false;
+
+                cb24HourCaseMode.Checked = false;
+                cb24HourCaseMode.Enabled = false;
+                config.caseMode24Hour = false;
+
+
+                cbEnableWeatherAC.Checked = false;
+                cbEnableWeatherAC.Enabled = false;
+                config.weatherACEnabled = false;
+
+                cbEnableWeatherCase.Checked = false;
+                cbEnableWeatherCase.Enabled = false;
+                config.weatherCaseEnabled = false;
+
+                cbEnableWeatherMice.Checked = false;
+                cbEnableWeatherMice.Enabled = false;
+                config.weatherMiceEnabled = false;
+            }
+            else if (config.gameVersion.Equals("Petz 5.exe"))
+            {
+                cbEnableSeasonalAC.Checked = false;
+                cbEnableSeasonalAC.Enabled = false;
+                config.seasonalACEnabled = false;
+
+                cbEnableSeasonalCase.Checked = false;
+                cbEnableSeasonalCase.Enabled = false;
+                config.seasonalCaseEnabled = false;
+
+
+                cbEnableTimeAC.Checked = false;
+                cbEnableTimeAC.Enabled = false;
+                config.timeACEnabled = false;
+
+                cbEnableTimeCase.Checked = false;
+                cbEnableTimeCase.Enabled = false;
+                config.timeCaseEnabled = false;
+
+                cb24HourCaseMode.Checked = false;
+                cb24HourCaseMode.Enabled = false;
+                config.caseMode24Hour = false;
+
+
+                cbEnableWeatherAC.Checked = false;
+                cbEnableWeatherAC.Enabled = false;
+                config.weatherACEnabled = false;
+
+                cbEnableWeatherCase.Checked = false;
+                cbEnableWeatherCase.Enabled = false;
+                config.weatherCaseEnabled = false;
+            }
         }
 
         private void loadContentProfileSettings()
@@ -138,13 +243,49 @@ namespace PetzEasyLoaderGUI
 
             cbDisableLoadingResources.Checked = config.disableLoadingResources;
             cbDisableLoadingPetz.Checked = config.disableLoadingPetz;
-            cbDisableLoadingPetzRez.Checked = config.disableLoadingPetzRez;
+
+            cbDisableLoadingCase.Checked = config.disableLoadingCase;
+            cbDisableLoadingMice.Checked = config.disableLoadingMice;
+            cbDisableLoadingAC.Checked = config.disableLoadingAC;
 
             List<string> profiles = new List<string>(config.include);
             profiles.AddRange(config.exclude);
             ddDeleteProfile.DataSource = profiles;
+
+            if (config.gameVersion.Equals("Babyz.exe"))
+            {
+                cbDisableLoadingCase.Enabled = false;
+                cbDisableLoadingCase.Checked = true;
+                config.disableLoadingCase = true;
+
+                cbDisableLoadingMice.Enabled = false;
+                cbDisableLoadingMice.Checked = true;
+                config.disableLoadingMice = true;
+
+                cbDisableLoadingAC.Enabled = false;
+                cbDisableLoadingAC.Checked = true;
+                config.disableLoadingAC = true;
+            }
+            else if (config.gameVersion.Equals("Petz 5.exe"))
+            {
+                cbDisableLoadingCase.Enabled = false;
+                cbDisableLoadingCase.Checked = true;
+                config.disableLoadingCase = true;
+
+                cbDisableLoadingAC.Enabled = false;
+                cbDisableLoadingAC.Checked = true;
+                config.disableLoadingAC = true;
+            }
         }
 
+        
+        private void changeUI(string petz)
+        {
+            btnStartPetz.Text = "Save and Start " + petz;
+            this.Text = petz + " EZLoader Settings";
+
+        }
+        
         // PETZ SOURCE CONTROLS 
         private void bnEditPetzSource_Click(object sender, EventArgs e)
         {
@@ -164,16 +305,24 @@ namespace PetzEasyLoaderGUI
                     case "Babyz.exe":
                         config.petzDir = path;
                         config.gameVersion = file;
+                        Program.saveIniFile();
+                        reloadEverything();
                         skipSave = false;
-                        loadPetzDir();
                         break;
                     default:
                         MessageBox.Show("Please select a valid Petz or Babyz .exe file");
                         break;
                 }
-                if (!Program.copyBaseGameBackupFolder(config.gameVersion)) fallbackError(config.gameVersion);
+                if (!config.disableBaseGameFallback)
+                {
+                    Program.regenerateBaseGameBackup(config.gameVersion);
+                    // set checkbox in case load failed
+                    cbDisableFallback.Checked = config.disableBaseGameFallback;
+                }
             }
         }
+
+
 
         //GENERAL SETTINGS
         private void cbAlwaySettings_CheckedChanged(object sender, EventArgs e)
@@ -263,6 +412,17 @@ namespace PetzEasyLoaderGUI
         private void cbEnableSeasonalArea_CheckedChanged(object sender, EventArgs e)
         {
             config.seasonalAreaEnabled = cbEnableSeasonalArea.Checked;
+
+            if (!cbEnableSeasonalArea.Checked)
+            {
+                cbEnableSeasonalAC.Checked = false;
+                cbEnableSeasonalAC.Enabled = false;
+                config.seasonalACEnabled = false;
+            }
+            else if (!config.gameVersion.Equals("Babyz.exe") && !config.gameVersion.Equals("Petz 5.exe"))
+            {
+                cbEnableSeasonalAC.Enabled = true;
+            }
             skipSave = false;
         }
         private void cbEnableSeasonalCase_CheckedChanged(object sender, EventArgs e)
@@ -273,6 +433,12 @@ namespace PetzEasyLoaderGUI
         private void cbEnableSeasonalMice_CheckedChanged(object sender, EventArgs e)
         {
             config.seasonalMiceEnabled = cbEnableSeasonalMice.Checked;
+            skipSave = false;
+        }
+
+        private void cbEnableSeasonalAC_CheckedChanged(object sender, EventArgs e)
+        {
+            config.seasonalACEnabled = cbEnableSeasonalAC.Checked;
             skipSave = false;
         }
 
@@ -313,6 +479,16 @@ namespace PetzEasyLoaderGUI
         private void cbEnableTimeArea_CheckedChanged(object sender, EventArgs e)
         {
             config.timeAreaEnabled = cbEnableTimeArea.Checked;
+            if (!cbEnableTimeArea.Checked)
+            {
+                cbEnableTimeAC.Checked = false;
+                cbEnableTimeAC.Enabled = false;
+                config.timeACEnabled = false;
+            }
+            else if (!config.gameVersion.Equals("Babyz.exe") && !config.gameVersion.Equals("Petz 5.exe"))
+            {
+                cbEnableTimeAC.Enabled = true;
+            }
             skipSave = false;
         }
         private void cbEnableTimeCase_CheckedChanged(object sender, EventArgs e)
@@ -333,6 +509,13 @@ namespace PetzEasyLoaderGUI
             config.timeMiceEnabled = cbEnableTimeMice.Checked;
             skipSave = false;
         }
+
+        private void cbEnableTimeAC_CheckedChanged(object sender, EventArgs e)
+        {
+            config.timeACEnabled = cbEnableTimeAC.Checked;
+            skipSave = false;
+        }
+
 
         private void ddDefaultTime_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -390,6 +573,16 @@ namespace PetzEasyLoaderGUI
         private void cbEnableWeatherArea_CheckedChanged(object sender, EventArgs e)
         {
             config.weatherAreaEnabled = cbEnableWeatherArea.Checked;
+            if (!cbEnableWeatherArea.Checked)
+            {
+                cbEnableWeatherAC.Checked = false;
+                cbEnableWeatherAC.Enabled = false;
+                config.weatherACEnabled = false;
+            }
+            else if (!config.gameVersion.Equals("Babyz.exe") && !config.gameVersion.Equals("Petz 5.exe"))
+            {
+                cbEnableWeatherAC.Enabled = true;
+            }
             skipSave = false;
         }
         private void cbEnableWeatherCase_CheckedChanged(object sender, EventArgs e)
@@ -400,6 +593,11 @@ namespace PetzEasyLoaderGUI
         private void cbEnableWeatherMice_CheckedChanged(object sender, EventArgs e)
         {
             config.weatherMiceEnabled = cbEnableWeatherMice.Checked;
+            skipSave = false;
+        }
+        private void cbEnableWeatherAC_CheckedChanged(object sender, EventArgs e)
+        {
+            config.weatherACEnabled = cbEnableWeatherAC.Checked;
             skipSave = false;
         }
 
@@ -671,27 +869,50 @@ namespace PetzEasyLoaderGUI
             skipSave = false;
         }
 
-        private void cbDisableLoadingPetzRez_CheckedChanged(object sender, EventArgs e)
+
+
+        private void cbDisableLoadingCase_CheckedChanged(object sender, EventArgs e)
         {
-            config.disableLoadingPetzRez = cbDisableLoadingPetzRez.Checked;
-
-            if (cbDisableLoadingPetzRez.Checked)
+            config.disableLoadingCase = cbDisableLoadingCase.Checked;
+            if (cbDisableLoadingCase.Checked)
             {
-                cbNpACSprites.Checked = false;
-                cbNpMice.Checked = false;
                 cbNpCase.Checked = false;
-
-                cbNpACSprites.Enabled = false;
-                cbNpMice.Enabled = false;
                 cbNpCase.Enabled = false;
             }
             else
             {
-                cbNpACSprites.Enabled = true;
-                cbNpMice.Enabled = true;
                 cbNpCase.Enabled = true;
             }
+            skipSave = false;
+        }
 
+        private void cbDisableLoadingMice_CheckedChanged(object sender, EventArgs e)
+        {
+            config.disableLoadingMice = cbDisableLoadingMice.Checked;
+            if (cbDisableLoadingMice.Checked)
+            {
+                cbNpMice.Checked = false;
+                cbNpMice.Enabled = false;
+            }
+            else
+            {
+                cbNpMice.Enabled = true;
+            }
+            skipSave = false;
+        }
+
+        private void cbDisableLoadingAC_CheckedChanged(object sender, EventArgs e)
+        {
+            config.disableLoadingAC = cbDisableLoadingAC.Checked;
+            if (cbDisableLoadingAC.Checked)
+            {
+                cbNpACSprites.Checked = false;
+                cbNpACSprites.Enabled = false;
+            }
+            else 
+            {
+                cbNpACSprites.Enabled = true;
+            }
             skipSave = false;
         }
 
@@ -855,8 +1076,9 @@ namespace PetzEasyLoaderGUI
         private void cbDisableFallback_CheckedChanged(object sender, EventArgs e)
         {
             config.disableBaseGameFallback = cbDisableFallback.Checked;
-            if (!cbDisableFallback.Checked) {
-                if (!Program.copyBaseGameBackupFolder(config.gameVersion)) fallbackError(config.gameVersion);
+            if (!cbDisableFallback.Checked)
+            {
+                Program.regenerateBaseGameBackup(config.gameVersion);
             }
             skipSave = true;
 
@@ -868,5 +1090,7 @@ namespace PetzEasyLoaderGUI
             config.disableBaseGameFallback = true;
             cbDisableFallback.Checked = true;
         }
+
+
     }
 }

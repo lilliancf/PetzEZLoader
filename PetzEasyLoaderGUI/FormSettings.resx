@@ -121,8 +121,8 @@
     <value>17, 17</value>
   </metadata>
   <data name="label10.Text" xml:space="preserve">
-    <value>Because the EZLoader is designed to move files around, there is inheritly the risk of accidentally 
-deleting or overwriting files that you didn't intend to.
+    <value>Because the EZLoader is designed to move files around, there is inheritly the risk of
+ accidentally deleting or overwriting files that you didn't intend to.
 Always back up any important files before using the EZLoader.
 </value>
   </data>

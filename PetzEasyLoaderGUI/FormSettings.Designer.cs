@@ -82,7 +82,7 @@
             tbLatitude = new TextBox();
             cb24HourCaseMode = new CheckBox();
             gbTimeOptions = new GroupBox();
-            label22 = new Label();
+            cbEnableTimeAC = new CheckBox();
             cbEnableTimeMice = new CheckBox();
             label17 = new Label();
             cbEnableTimeCase = new CheckBox();
@@ -103,8 +103,10 @@
             btnGenerateDebug = new Button();
             tbContentProfiles = new TabPage();
             gbLoadingOverride = new GroupBox();
+            cbDisableLoadingCase = new CheckBox();
+            cbDisableLoadingMice = new CheckBox();
+            cbDisableLoadingAC = new CheckBox();
             cbDisableLoadingPetz = new CheckBox();
-            cbDisableLoadingPetzRez = new CheckBox();
             cbDisableLoadingResources = new CheckBox();
             lNameFilter = new Label();
             tbNameFilter = new TextBox();
@@ -133,12 +135,14 @@
             cbNpCatz = new CheckBox();
             tpAutoSwap = new TabPage();
             gbSeasonalOptions = new GroupBox();
+            cbEnableSeasonalAC = new CheckBox();
             cbEnableSeasonalArea = new CheckBox();
             cbEnableSeasonalCase = new CheckBox();
             cbEnableSeasonalMice = new CheckBox();
             label18 = new Label();
             label21 = new Label();
             gbWeatherOptions = new GroupBox();
+            cbEnableWeatherAC = new CheckBox();
             cbEnableWeatherMice = new CheckBox();
             cbEnableWeatherCase = new CheckBox();
             cbEnableWeatherArea = new CheckBox();
@@ -163,15 +167,15 @@
             label1.AutoSize = true;
             label1.Location = new Point(7, 10);
             label1.Name = "label1";
-            label1.Size = new Size(71, 15);
+            label1.Size = new Size(80, 15);
             label1.TabIndex = 2;
-            label1.Text = "Petz Source:";
+            label1.Text = "Game Source:";
             // 
             // labelPetzExe
             // 
             labelPetzExe.AutoEllipsis = true;
             labelPetzExe.AutoSize = true;
-            labelPetzExe.Location = new Point(84, 10);
+            labelPetzExe.Location = new Point(93, 10);
             labelPetzExe.MaximumSize = new Size(525, 15);
             labelPetzExe.Name = "labelPetzExe";
             labelPetzExe.Size = new Size(517, 15);
@@ -229,7 +233,7 @@
             // linkGithub
             // 
             linkGithub.AutoSize = true;
-            linkGithub.Location = new Point(313, 34);
+            linkGithub.Location = new Point(312, 34);
             linkGithub.Margin = new Padding(2, 0, 2, 0);
             linkGithub.Name = "linkGithub";
             linkGithub.Size = new Size(228, 15);
@@ -251,7 +255,7 @@
             // linkOpenMeteo
             // 
             linkOpenMeteo.AutoSize = true;
-            linkOpenMeteo.Location = new Point(394, 64);
+            linkOpenMeteo.Location = new Point(395, 64);
             linkOpenMeteo.Name = "linkOpenMeteo";
             linkOpenMeteo.Size = new Size(145, 15);
             linkOpenMeteo.TabIndex = 22;
@@ -280,7 +284,7 @@
             // linkAliveEnough
             // 
             linkAliveEnough.AutoSize = true;
-            linkAliveEnough.Location = new Point(320, 49);
+            linkAliveEnough.Location = new Point(319, 49);
             linkAliveEnough.Name = "linkAliveEnough";
             linkAliveEnough.Size = new Size(221, 15);
             linkAliveEnough.TabIndex = 18;
@@ -295,7 +299,7 @@
             label9.Name = "label9";
             label9.Size = new Size(70, 15);
             label9.TabIndex = 1;
-            label9.Text = "version 3.0b";
+            label9.Text = "version 3.1b";
             // 
             // label8
             // 
@@ -372,7 +376,7 @@
             // 
             // bnRefreshFolders
             // 
-            bnRefreshFolders.Location = new Point(441, 178);
+            bnRefreshFolders.Location = new Point(447, 7);
             bnRefreshFolders.Name = "bnRefreshFolders";
             bnRefreshFolders.Size = new Size(105, 23);
             bnRefreshFolders.TabIndex = 15;
@@ -436,7 +440,7 @@
             // 
             dtpWinterStart.CustomFormat = "MMM dd";
             dtpWinterStart.Format = DateTimePickerFormat.Custom;
-            dtpWinterStart.Location = new Point(126, 128);
+            dtpWinterStart.Location = new Point(131, 141);
             dtpWinterStart.Name = "dtpWinterStart";
             dtpWinterStart.Size = new Size(75, 23);
             dtpWinterStart.TabIndex = 4;
@@ -445,7 +449,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(15, 156);
+            label4.Location = new Point(17, 171);
             label4.Name = "label4";
             label4.Size = new Size(98, 15);
             label4.TabIndex = 5;
@@ -454,7 +458,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(15, 130);
+            label3.Location = new Point(16, 147);
             label3.Name = "label3";
             label3.Size = new Size(99, 15);
             label3.TabIndex = 1;
@@ -463,7 +467,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(6, 181);
+            label5.Location = new Point(6, 196);
             label5.Name = "label5";
             label5.Size = new Size(109, 15);
             label5.TabIndex = 6;
@@ -472,7 +476,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(34, 205);
+            label6.Location = new Point(33, 221);
             label6.Name = "label6";
             label6.Size = new Size(82, 15);
             label6.TabIndex = 5;
@@ -482,7 +486,7 @@
             // 
             dtpSpringStart.CustomFormat = "MMM dd";
             dtpSpringStart.Format = DateTimePickerFormat.Custom;
-            dtpSpringStart.Location = new Point(126, 153);
+            dtpSpringStart.Location = new Point(131, 165);
             dtpSpringStart.Name = "dtpSpringStart";
             dtpSpringStart.Size = new Size(75, 23);
             dtpSpringStart.TabIndex = 5;
@@ -503,7 +507,7 @@
             // 
             dtpSummerStart.CustomFormat = "MMM dd";
             dtpSummerStart.Format = DateTimePickerFormat.Custom;
-            dtpSummerStart.Location = new Point(126, 178);
+            dtpSummerStart.Location = new Point(131, 190);
             dtpSummerStart.Name = "dtpSummerStart";
             dtpSummerStart.Size = new Size(75, 23);
             dtpSummerStart.TabIndex = 6;
@@ -513,7 +517,7 @@
             // 
             dtpFallStart.CustomFormat = "MMM dd";
             dtpFallStart.Format = DateTimePickerFormat.Custom;
-            dtpFallStart.Location = new Point(126, 202);
+            dtpFallStart.Location = new Point(131, 215);
             dtpFallStart.Name = "dtpFallStart";
             dtpFallStart.Size = new Size(75, 23);
             dtpFallStart.TabIndex = 7;
@@ -523,17 +527,17 @@
             // 
             dtpSunrise.CustomFormat = "hh:mm tt";
             dtpSunrise.Format = DateTimePickerFormat.Custom;
-            dtpSunrise.Location = new Point(91, 120);
+            dtpSunrise.Location = new Point(91, 136);
             dtpSunrise.Name = "dtpSunrise";
             dtpSunrise.ShowUpDown = true;
-            dtpSunrise.Size = new Size(101, 23);
+            dtpSunrise.Size = new Size(88, 23);
             dtpSunrise.TabIndex = 8;
             dtpSunrise.ValueChanged += dtpSunrise_ValueChanged;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(8, 123);
+            label2.Location = new Point(8, 136);
             label2.Name = "label2";
             label2.Size = new Size(77, 15);
             label2.TabIndex = 5;
@@ -543,17 +547,17 @@
             // 
             dtpSunset.CustomFormat = "hh:mm tt";
             dtpSunset.Format = DateTimePickerFormat.Custom;
-            dtpSunset.Location = new Point(91, 149);
+            dtpSunset.Location = new Point(91, 165);
             dtpSunset.Name = "dtpSunset";
             dtpSunset.ShowUpDown = true;
-            dtpSunset.Size = new Size(101, 23);
+            dtpSunset.Size = new Size(88, 23);
             dtpSunset.TabIndex = 9;
             dtpSunset.ValueChanged += dtpSunset_ValueChanged;
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(10, 152);
+            label7.Location = new Point(11, 171);
             label7.Name = "label7";
             label7.Size = new Size(74, 15);
             label7.TabIndex = 5;
@@ -564,7 +568,7 @@
             ddDefaultSeason.DropDownStyle = ComboBoxStyle.DropDownList;
             ddDefaultSeason.FormattingEnabled = true;
             ddDefaultSeason.Items.AddRange(new object[] { "Winter", "Spring", "Summer", "Fall" });
-            ddDefaultSeason.Location = new Point(108, 21);
+            ddDefaultSeason.Location = new Point(103, 19);
             ddDefaultSeason.Name = "ddDefaultSeason";
             ddDefaultSeason.Size = new Size(103, 23);
             ddDefaultSeason.TabIndex = 19;
@@ -573,11 +577,11 @@
             // cbEnableSunriseset
             // 
             cbEnableSunriseset.AutoSize = true;
-            cbEnableSunriseset.Location = new Point(14, 178);
+            cbEnableSunriseset.Location = new Point(13, 192);
             cbEnableSunriseset.Name = "cbEnableSunriseset";
-            cbEnableSunriseset.Size = new Size(218, 19);
+            cbEnableSunriseset.Size = new Size(274, 19);
             cbEnableSunriseset.TabIndex = 20;
-            cbEnableSunriseset.Text = "Enable unique sunrise/sunset scenes";
+            cbEnableSunriseset.Text = "Enable unique sunrise/sunset swaps (area only)";
             cbEnableSunriseset.UseVisualStyleBackColor = true;
             cbEnableSunriseset.CheckedChanged += cbEnableSunRiseSet_CheckedChanged;
             // 
@@ -660,19 +664,19 @@
             // cb24HourCaseMode
             // 
             cb24HourCaseMode.AutoSize = true;
-            cb24HourCaseMode.Location = new Point(14, 202);
+            cb24HourCaseMode.Location = new Point(13, 217);
             cb24HourCaseMode.Name = "cb24HourCaseMode";
-            cb24HourCaseMode.Size = new Size(189, 19);
+            cb24HourCaseMode.Size = new Size(284, 19);
             cb24HourCaseMode.TabIndex = 4;
-            cb24HourCaseMode.Text = "Enable 24 Hour Case Swapping\r\n";
+            cb24HourCaseMode.Text = "Enable 24 Hour Case Mode (no weather/seasons)\r\n";
             cb24HourCaseMode.UseVisualStyleBackColor = true;
             cb24HourCaseMode.CheckedChanged += cb24HourCaseMode_CheckedChanged;
             // 
             // gbTimeOptions
             // 
-            gbTimeOptions.Controls.Add(label22);
-            gbTimeOptions.Controls.Add(cb24HourCaseMode);
+            gbTimeOptions.Controls.Add(cbEnableTimeAC);
             gbTimeOptions.Controls.Add(cbEnableTimeMice);
+            gbTimeOptions.Controls.Add(cb24HourCaseMode);
             gbTimeOptions.Controls.Add(label17);
             gbTimeOptions.Controls.Add(cbEnableTimeCase);
             gbTimeOptions.Controls.Add(ddDefaultTime);
@@ -691,19 +695,21 @@
             gbTimeOptions.TabStop = false;
             gbTimeOptions.Text = "Day/Night Options";
             // 
-            // label22
+            // cbEnableTimeAC
             // 
-            label22.AutoSize = true;
-            label22.Location = new Point(3, 223);
-            label22.Name = "label22";
-            label22.Size = new Size(283, 15);
-            label22.TabIndex = 29;
-            label22.Text = "(will disable seasons and weather swapping for case)";
+            cbEnableTimeAC.AutoSize = true;
+            cbEnableTimeAC.Location = new Point(45, 64);
+            cbEnableTimeAC.Name = "cbEnableTimeAC";
+            cbEnableTimeAC.Size = new Size(118, 19);
+            cbEnableTimeAC.TabIndex = 25;
+            cbEnableTimeAC.Text = "Enable AC Sprites";
+            cbEnableTimeAC.UseVisualStyleBackColor = true;
+            cbEnableTimeAC.CheckedChanged += cbEnableTimeAC_CheckedChanged;
             // 
             // cbEnableTimeMice
             // 
             cbEnableTimeMice.AutoSize = true;
-            cbEnableTimeMice.Location = new Point(15, 95);
+            cbEnableTimeMice.Location = new Point(14, 111);
             cbEnableTimeMice.Name = "cbEnableTimeMice";
             cbEnableTimeMice.Size = new Size(145, 19);
             cbEnableTimeMice.TabIndex = 27;
@@ -723,7 +729,7 @@
             // cbEnableTimeCase
             // 
             cbEnableTimeCase.AutoSize = true;
-            cbEnableTimeCase.Location = new Point(15, 70);
+            cbEnableTimeCase.Location = new Point(14, 89);
             cbEnableTimeCase.Name = "cbEnableTimeCase";
             cbEnableTimeCase.Size = new Size(144, 19);
             cbEnableTimeCase.TabIndex = 26;
@@ -788,7 +794,7 @@
             label10.AutoSize = true;
             label10.Location = new Point(6, 19);
             label10.Name = "label10";
-            label10.Size = new Size(510, 45);
+            label10.Size = new Size(441, 45);
             label10.TabIndex = 0;
             label10.Text = resources.GetString("label10.Text");
             // 
@@ -936,20 +942,55 @@
             // 
             // gbLoadingOverride
             // 
+            gbLoadingOverride.Controls.Add(cbDisableLoadingCase);
+            gbLoadingOverride.Controls.Add(cbDisableLoadingMice);
+            gbLoadingOverride.Controls.Add(cbDisableLoadingAC);
             gbLoadingOverride.Controls.Add(cbDisableLoadingPetz);
-            gbLoadingOverride.Controls.Add(cbDisableLoadingPetzRez);
             gbLoadingOverride.Controls.Add(cbDisableLoadingResources);
-            gbLoadingOverride.Location = new Point(296, 207);
+            gbLoadingOverride.Location = new Point(296, 181);
             gbLoadingOverride.Name = "gbLoadingOverride";
-            gbLoadingOverride.Size = new Size(256, 94);
+            gbLoadingOverride.Size = new Size(256, 120);
             gbLoadingOverride.TabIndex = 25;
             gbLoadingOverride.TabStop = false;
             gbLoadingOverride.Text = "Loading Override Settings";
             // 
+            // cbDisableLoadingCase
+            // 
+            cbDisableLoadingCase.AutoSize = true;
+            cbDisableLoadingCase.Location = new Point(6, 70);
+            cbDisableLoadingCase.Name = "cbDisableLoadingCase";
+            cbDisableLoadingCase.Size = new Size(145, 19);
+            cbDisableLoadingCase.TabIndex = 26;
+            cbDisableLoadingCase.Text = "Disable Carrying Cases";
+            cbDisableLoadingCase.UseVisualStyleBackColor = true;
+            cbDisableLoadingCase.CheckedChanged += cbDisableLoadingCase_CheckedChanged;
+            // 
+            // cbDisableLoadingMice
+            // 
+            cbDisableLoadingMice.AutoSize = true;
+            cbDisableLoadingMice.Location = new Point(6, 95);
+            cbDisableLoadingMice.Name = "cbDisableLoadingMice";
+            cbDisableLoadingMice.Size = new Size(93, 19);
+            cbDisableLoadingMice.TabIndex = 27;
+            cbDisableLoadingMice.Text = "Disable Mice";
+            cbDisableLoadingMice.UseVisualStyleBackColor = true;
+            cbDisableLoadingMice.CheckedChanged += cbDisableLoadingMice_CheckedChanged;
+            // 
+            // cbDisableLoadingAC
+            // 
+            cbDisableLoadingAC.AutoSize = true;
+            cbDisableLoadingAC.Location = new Point(105, 95);
+            cbDisableLoadingAC.Name = "cbDisableLoadingAC";
+            cbDisableLoadingAC.Size = new Size(121, 19);
+            cbDisableLoadingAC.TabIndex = 25;
+            cbDisableLoadingAC.Text = "Disable AC Sprites";
+            cbDisableLoadingAC.UseVisualStyleBackColor = true;
+            cbDisableLoadingAC.CheckedChanged += cbDisableLoadingAC_CheckedChanged;
+            // 
             // cbDisableLoadingPetz
             // 
             cbDisableLoadingPetz.AutoSize = true;
-            cbDisableLoadingPetz.Location = new Point(6, 48);
+            cbDisableLoadingPetz.Location = new Point(6, 47);
             cbDisableLoadingPetz.Name = "cbDisableLoadingPetz";
             cbDisableLoadingPetz.Size = new Size(184, 19);
             cbDisableLoadingPetz.TabIndex = 22;
@@ -957,21 +998,10 @@
             cbDisableLoadingPetz.UseVisualStyleBackColor = true;
             cbDisableLoadingPetz.CheckedChanged += cbDisableLoadingPetz_CheckedChanged;
             // 
-            // cbDisableLoadingPetzRez
-            // 
-            cbDisableLoadingPetzRez.AutoSize = true;
-            cbDisableLoadingPetzRez.Location = new Point(6, 73);
-            cbDisableLoadingPetzRez.Name = "cbDisableLoadingPetzRez";
-            cbDisableLoadingPetzRez.Size = new Size(209, 19);
-            cbDisableLoadingPetzRez.TabIndex = 24;
-            cbDisableLoadingPetzRez.Text = "Disable Loading PetzRez Resources";
-            cbDisableLoadingPetzRez.UseVisualStyleBackColor = true;
-            cbDisableLoadingPetzRez.CheckedChanged += cbDisableLoadingPetzRez_CheckedChanged;
-            // 
             // cbDisableLoadingResources
             // 
             cbDisableLoadingResources.AutoSize = true;
-            cbDisableLoadingResources.Location = new Point(6, 23);
+            cbDisableLoadingResources.Location = new Point(6, 22);
             cbDisableLoadingResources.Name = "cbDisableLoadingResources";
             cbDisableLoadingResources.Size = new Size(166, 19);
             cbDisableLoadingResources.TabIndex = 23;
@@ -984,15 +1014,15 @@
             lNameFilter.AutoSize = true;
             lNameFilter.Location = new Point(41, 181);
             lNameFilter.Name = "lNameFilter";
-            lNameFilter.Size = new Size(71, 15);
+            lNameFilter.Size = new Size(36, 15);
             lNameFilter.TabIndex = 23;
-            lNameFilter.Text = "Name Filter:";
+            lNameFilter.Text = "Filter:";
             // 
             // tbNameFilter
             // 
-            tbNameFilter.Location = new Point(118, 178);
+            tbNameFilter.Location = new Point(83, 178);
             tbNameFilter.Name = "tbNameFilter";
-            tbNameFilter.Size = new Size(157, 23);
+            tbNameFilter.Size = new Size(192, 23);
             tbNameFilter.TabIndex = 22;
             tbNameFilter.TextChanged += tbNameFilter_TextChanged;
             // 
@@ -1282,6 +1312,7 @@
             // 
             // gbSeasonalOptions
             // 
+            gbSeasonalOptions.Controls.Add(cbEnableSeasonalAC);
             gbSeasonalOptions.Controls.Add(cbEnableSeasonalArea);
             gbSeasonalOptions.Controls.Add(cbEnableSeasonalCase);
             gbSeasonalOptions.Controls.Add(cbEnableSeasonalMice);
@@ -1302,10 +1333,21 @@
             gbSeasonalOptions.TabStop = false;
             gbSeasonalOptions.Text = "Seasonal Options";
             // 
+            // cbEnableSeasonalAC
+            // 
+            cbEnableSeasonalAC.AutoSize = true;
+            cbEnableSeasonalAC.Location = new Point(40, 64);
+            cbEnableSeasonalAC.Name = "cbEnableSeasonalAC";
+            cbEnableSeasonalAC.Size = new Size(118, 19);
+            cbEnableSeasonalAC.TabIndex = 25;
+            cbEnableSeasonalAC.Text = "Enable AC Sprites";
+            cbEnableSeasonalAC.UseVisualStyleBackColor = true;
+            cbEnableSeasonalAC.CheckedChanged += cbEnableSeasonalAC_CheckedChanged;
+            // 
             // cbEnableSeasonalArea
             // 
             cbEnableSeasonalArea.AutoSize = true;
-            cbEnableSeasonalArea.Location = new Point(14, 49);
+            cbEnableSeasonalArea.Location = new Point(14, 45);
             cbEnableSeasonalArea.Name = "cbEnableSeasonalArea";
             cbEnableSeasonalArea.Size = new Size(171, 19);
             cbEnableSeasonalArea.TabIndex = 27;
@@ -1316,7 +1358,7 @@
             // cbEnableSeasonalCase
             // 
             cbEnableSeasonalCase.AutoSize = true;
-            cbEnableSeasonalCase.Location = new Point(14, 74);
+            cbEnableSeasonalCase.Location = new Point(13, 89);
             cbEnableSeasonalCase.Name = "cbEnableSeasonalCase";
             cbEnableSeasonalCase.Size = new Size(144, 19);
             cbEnableSeasonalCase.TabIndex = 26;
@@ -1327,7 +1369,7 @@
             // cbEnableSeasonalMice
             // 
             cbEnableSeasonalMice.AutoSize = true;
-            cbEnableSeasonalMice.Location = new Point(13, 99);
+            cbEnableSeasonalMice.Location = new Point(14, 111);
             cbEnableSeasonalMice.Name = "cbEnableSeasonalMice";
             cbEnableSeasonalMice.Size = new Size(145, 19);
             cbEnableSeasonalMice.TabIndex = 25;
@@ -1355,6 +1397,7 @@
             // 
             // gbWeatherOptions
             // 
+            gbWeatherOptions.Controls.Add(cbEnableWeatherAC);
             gbWeatherOptions.Controls.Add(cbEnableWeatherMice);
             gbWeatherOptions.Controls.Add(cbEnableWeatherCase);
             gbWeatherOptions.Controls.Add(cbEnableWeatherArea);
@@ -1373,10 +1416,21 @@
             gbWeatherOptions.TabStop = false;
             gbWeatherOptions.Text = "Weather Options";
             // 
+            // cbEnableWeatherAC
+            // 
+            cbEnableWeatherAC.AutoSize = true;
+            cbEnableWeatherAC.Location = new Point(191, 49);
+            cbEnableWeatherAC.Name = "cbEnableWeatherAC";
+            cbEnableWeatherAC.Size = new Size(125, 19);
+            cbEnableWeatherAC.TabIndex = 25;
+            cbEnableWeatherAC.Text = "Enabled AC Sprites";
+            cbEnableWeatherAC.UseVisualStyleBackColor = true;
+            cbEnableWeatherAC.CheckedChanged += cbEnableWeatherAC_CheckedChanged;
+            // 
             // cbEnableWeatherMice
             // 
             cbEnableWeatherMice.AutoSize = true;
-            cbEnableWeatherMice.Location = new Point(30, 98);
+            cbEnableWeatherMice.Location = new Point(13, 73);
             cbEnableWeatherMice.Name = "cbEnableWeatherMice";
             cbEnableWeatherMice.Size = new Size(145, 19);
             cbEnableWeatherMice.TabIndex = 35;
@@ -1387,7 +1441,7 @@
             // cbEnableWeatherCase
             // 
             cbEnableWeatherCase.AutoSize = true;
-            cbEnableWeatherCase.Location = new Point(30, 73);
+            cbEnableWeatherCase.Location = new Point(13, 98);
             cbEnableWeatherCase.Name = "cbEnableWeatherCase";
             cbEnableWeatherCase.Size = new Size(144, 19);
             cbEnableWeatherCase.TabIndex = 34;
@@ -1398,7 +1452,7 @@
             // cbEnableWeatherArea
             // 
             cbEnableWeatherArea.AutoSize = true;
-            cbEnableWeatherArea.Location = new Point(30, 48);
+            cbEnableWeatherArea.Location = new Point(14, 48);
             cbEnableWeatherArea.Name = "cbEnableWeatherArea";
             cbEnableWeatherArea.Size = new Size(171, 19);
             cbEnableWeatherArea.TabIndex = 33;
@@ -1419,7 +1473,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(589, 515);
+            ClientSize = new Size(587, 515);
             Controls.Add(tabControl1);
             Controls.Add(btnSave);
             Controls.Add(btnStartPetz);
@@ -1523,7 +1577,6 @@
         private CheckBox cbEnableTimeCase;
         private CheckBox cbEnableTimeArea;
         private CheckBox cbEnableTimeMice;
-        private Label label22;
         private CheckBox cbEnableWeatherMice;
         private CheckBox cbEnableWeatherCase;
         private CheckBox cbEnableWeatherArea;
@@ -1565,9 +1618,14 @@
         private Button btnRegenFolders;
         private CheckBox cbDisableLoadingPetz;
         private CheckBox cbDisableLoadingResources;
-        private CheckBox cbDisableLoadingPetzRez;
         private GroupBox gbLoadingOverride;
         private GroupBox gbWarning;
         private Label label10;
+        private CheckBox cbDisableLoadingCase;
+        private CheckBox cbDisableLoadingMice;
+        private CheckBox cbDisableLoadingAC;
+        private CheckBox cbEnableSeasonalAC;
+        private CheckBox cbEnableTimeAC;
+        private CheckBox cbEnableWeatherAC;
     }
 }
