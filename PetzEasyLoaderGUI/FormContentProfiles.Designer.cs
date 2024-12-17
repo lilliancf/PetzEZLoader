@@ -332,7 +332,7 @@
             // 
             // bnSave
             // 
-            bnSave.Location = new Point(448, 246);
+            bnSave.Location = new Point(441, 246);
             bnSave.Name = "bnSave";
             bnSave.Size = new Size(71, 23);
             bnSave.TabIndex = 45;
@@ -342,9 +342,9 @@
             // 
             // bnStartPetz
             // 
-            bnStartPetz.Location = new Point(525, 246);
+            bnStartPetz.Location = new Point(518, 246);
             bnStartPetz.Name = "bnStartPetz";
-            bnStartPetz.Size = new Size(127, 23);
+            bnStartPetz.Size = new Size(134, 23);
             bnStartPetz.TabIndex = 46;
             bnStartPetz.Text = "Save and Start Petz";
             bnStartPetz.UseVisualStyleBackColor = true;
@@ -358,7 +358,7 @@
             bnHelp.TabIndex = 47;
             bnHelp.Text = "Help";
             bnHelp.UseVisualStyleBackColor = true;
-            bnHelp.Click += this.bnHelp_Click;
+            bnHelp.Click += bnHelp_Click;
             // 
             // bnIncDown
             // 

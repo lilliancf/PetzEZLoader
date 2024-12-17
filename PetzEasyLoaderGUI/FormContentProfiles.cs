@@ -31,7 +31,24 @@ namespace PetzEasyLoaderGUI
 
             buildSubfolderList();
 
+            if (config.gameVersion.Equals("Babyz.exe")) loadBabyzMode();
+
             skipSave = true;
+        }
+
+        private void loadBabyzMode()
+        {
+            bnStartPetz.Text = "Save and Start Babyz";
+            cbAdoptedPetz.Text = "Babyz";
+
+            cbACSprites.Enabled = false;
+            cbCatz.Enabled = false;
+            cbCase.Enabled = false;
+            cbDogz.Enabled = false;
+            cbMice.Enabled = false;
+            cbToyz.Enabled = false;
+            cbWallpaper.Enabled = false;
+            
         }
 
         private void buildSubfolderList()
