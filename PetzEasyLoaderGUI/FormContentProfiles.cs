@@ -48,7 +48,6 @@ namespace PetzEasyLoaderGUI
             cbMice.Enabled = false;
             cbToyz.Enabled = false;
             cbWallpaper.Enabled = false;
-            
         }
 
         private void buildSubfolderList()

@@ -137,7 +137,7 @@ namespace PetzEasyLoaderGUI
                     }
                 }
             }
-            DirectoryInfo gameDI = new DirectoryInfo(config.petzDir);
+            DirectoryInfo gameDI = new DirectoryInfo(gamePath);
             foreach (DirectoryInfo di in gameDI.GetDirectories())
             {
                 cleanupSubFolders(di);
