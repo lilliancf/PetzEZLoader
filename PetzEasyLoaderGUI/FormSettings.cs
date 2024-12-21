@@ -939,7 +939,7 @@ namespace PetzEasyLoaderGUI
                     DirectoryInfo newProfile = new DirectoryInfo(Path.Combine(Program.fileSource, "ContentProfiles", newProfileName));
                     newProfile.Create();
 
-                    if (cbNpAdoptedPetz.Checked) newProfile.CreateSubdirectory("Adopted Petz");
+                    if (cbNpAdoptedPetz.Checked)  newProfile.CreateSubdirectory(config.gameVersion.Equals("Babyz.exe") ? "Adopted Babyz" : "Adopted Petz");
                     if (cbNpACSprites.Checked) newProfile.CreateSubdirectory("ACSprites");
                     if (cbNpCase.Checked) newProfile.CreateSubdirectory("CarryingCase");
                     if (cbNpMice.Checked) newProfile.CreateSubdirectory("Mice");
