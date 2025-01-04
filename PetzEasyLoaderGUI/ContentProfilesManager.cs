@@ -355,10 +355,11 @@ namespace PetzEasyLoaderGUI
                                             newStoragePath = Path.Combine(includeFolderPath, petName);
                                             // rename the pet in game
                                             File.Move(possiblePet, Path.Combine(gamePath, petName));
-                                            // delete the old pet in storage
-                                            File.Delete(workingPetInStorage);
-                                            workingPetInStorage = newStoragePath;
                                         }
+
+                                        // delete the old pet in storage
+                                        File.Delete(workingPetInStorage);
+
                                         // copy the pet with the new name into storage
                                         File.Copy(Path.Combine(gamePath, petName), newStoragePath, true);
 
