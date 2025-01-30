@@ -314,8 +314,7 @@ namespace PetzEasyLoaderGUI
                 {
                     DateTime dateTime = DateTime.Now;
                     int curHour = Int32.Parse(dateTime.ToString("HH"));
-                    string folder = "Case " + (curHour - 1);
-
+                    string folder = "Case " + curHour;
                     seasonalPath = Path.Combine(seasonalCasePath, "24hour", folder);
                 }
                 else

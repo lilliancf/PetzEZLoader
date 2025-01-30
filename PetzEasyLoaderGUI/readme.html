@@ -8,7 +8,7 @@
 		<style>
 			body {
 				margin: auto;
-				max-width: 800px;
+				max-width: 900px;
 				font-size: 1.2em;
 				line-height: 1.4em;
 			}
@@ -24,127 +24,373 @@
 	</head>
 	<body>
 		<h1>Welcome to Petz EZLoader</h1>
-		<h2>your simple petz mod management system</h2>
+		<h2>your petz content companion</h2>
 
 		<hr />
 
 		<h3>DISCLAIMER:</h3>
 		<p>
-			PetzEL is designed to modify content in your petz Resource folders, so before using it BACK UP THOSE FOLDERS. I am not responsible if this program overwrites or deletes any important files
-			you decided to store in those folders, or otherwise breaks your game.
+			PetzEL is designed to modify content in your Petz game folders, so before using it BACK UP THOSE FOLDERS. I am not responsible if this program overwrites or deletes any important files you
+			decided to store in those folders, or otherwise breaks your game.
 		</p>
 
 		<hr />
+		<h2>Table of Contents</h2>
 
-		<h3>Installation Instructions:</h3>
+		<ol>
+			<li>
+				<a href="#quick-start">Quick Start Guide</a>
+				<ol>
+					<li>
+						<a href="#qs-initial-setup">Initial Setup</a>
+						<ol>
+							<li><a href="#qs-setup-new">New Installation</a></li>
+							<li><a href="#qs-setup-update">Updating a Previous Version</a></li>
+							<li><a href="#qs-setup-info">General Setup Info</a></li>
+						</ol>
+					</li>
+					<li>
+						<a href="#qs-content-profiles">Content Profiles Setup</a>
+						<ol>
+							<li><a href="#qs-setup-new">New Installation</a></li>
+							<li><a href="#qs-setup-update">Updating a Previous Version</a></li>
+							<li><a href="#qs-setup-info">General Setup Info</a></li>
+						</ol>
+					</li>
+					<li>
+						<a href="#qs-auto-swapping">Auto Swapping Setup</a>
+						<ol>
+							<li><a href="#qs-setup-new">New Installation</a></li>
+							<li><a href="#qs-setup-update">Updating a Previous Version</a></li>
+							<li><a href="#qs-setup-info">General Setup Info</a></li>
+						</ol>
+					</li>
+				</ol>
+			</li>
+		</ol>
+
+		<hr />
+
+		<h2 id="quick-start">Quick Start Guide</h2>
+
+		<h3>Initial Setup</h3>
 
 		<p>
 			<span class="bold">IMPORTANT:</span> If your Petz .exe is configured to "Run as Administrator", PetzEL must also be run as administrator! Otherwise PetzEL will not be able to automatically
 			start the game.
 		</p>
 
+		<h4 id="qs-setup-new">New Installation</h4>
+
+		<ul>
+			<li>
+				Download PetzEZL zip and extract the contents to any non-Program Files directory, such as your "Documents" folder (tip: you can always find the latest release on
+				<a href="https://github.com/lilliancf/PetzEZLoader/releases">the github page</a>)
+			</li>
+			<li>
+				(Optional, but recommended) Download the baseGameBackups zip, and copy the baseGameBackups folder into the same directory as the PetzEZLoader.exe file. This will enable you to use the
+				Base Game File Fallback feature, which will ensure that your game never launches without necessary files.
+			</li>
+			<li>Upon first launch, the program will automatically open the settings menu. Select the "Game Source" button, and navigate to the location of your Petz/Babyz exe file</li>
+			<li>Once the Petz exe file is set, you can proceed to Content Profiles Setup or Auto Swapping Setup, depending on which features you wish to use</li>
+			<li>Please read the <a href="#qs-setup-info">General Setup Info</a> section for more tips about how to use the EZLoader</li>
+		</ul>
+
+		<h4 id="qs-setup-update">Updating a Previous Version</h4>
+
+		<ul>
+			<li>
+				Download the newest version (tip: you can always find the latest release on <a href="https://github.com/lilliancf/PetzEZLoader/releases">the github page</a>) and extract the contents
+				into the same directory as the previous installation, overwriting any files with the same name
+			</li>
+			<li>
+				(Optional, but recommended) Download the baseGameBackups zip, and copy the baseGameBackups folder into the same directory as the PetzEZLoader.exe file. This will enable you to use the
+				Base Game File Fallback feature, which will ensure that your game never launches without necessary files.
+			</li>
+			<li>
+				Launch the program. Depending on the version you are upgrading from, the PetzEZL program will attempt to automatically migrate your Content Profiles into the new format, however,
+				<b>you will have to manually copy the SeasonalArea files</b>. Once finished, feel free to delete the old Files folder.
+			</li>
+			<li>The PetzEZLoader will also attempt to copy your settings, but a lot new features have arrived. Check Content Profiles Setup or Auto Swapping Setup for more information.</li>
+			<li>Please read the <a href="#qs-setup-info">General Setup Info</a> section for more tips about how to use the EZLoader</li>
+		</ul>
+
+		<h4 id="qs-setup-info">General Setup Info</h4>
+
+		<ul>
+			<li>
+				Once you have completed this initial setup, PetzEZL will not open the settings menu unless the "Always Open Settings" option is checked. However, you can always open the settings menu
+				again by double clicking the "modify_setting.bat" file included in the installation directory.
+			</li>
+			<li>
+				In order for the PetzEZL features to work properly, it is recommended that you alway use PetzEZL to launch your game. If you'd like, you can create a shortcut to PetzEZL and rename it
+				to whichever game version you're running, and change the icon to one of the included Petz icon files
+			</li>
+			<li>
+				If you wish to use PetzEZL with more than one P.F. Magic game, you can have multiple installations on one computer, all configured to run different games. Just make sure the files
+				being loaded match the game version you're running! (Note: it is recommended to download a fresh copy of the program for each game, rather than copying a previously installed version,
+				as the EZLoader will enable or disable features depending on the selected game)
+			</li>
+		</ul>
+
+		<h3 id="qs-content-profiles">Content Profiles Setup</h3>
 		<p>
-			To install PetzEL, simply extract the PetzEL installation .zip into any non-Program Files directory, such as your "Documents" folder. Upon first launch, the program will automatically open
-			the settings menu. There, you will be prompted to select the .exe file for the Petz/Babyz game you wish to use with PetzEL. PetzEL currently supports Petz 3, 4, 5 and Babyz. After that,
-			you can adjust the settings to you liking, then click "Save and Start Petz" to launch the game.
+			Content Profiles (previously known as Bulk Loading) allows you to easily add and remove folders full of content from your game with a single click. The flexibility of content profiles
+			means they can be used for almost anything - managing your seasonal toyz and clothes, building sets of your favorite OW files for breeding, swapping in and out WIP hexies, and even more!
+			Additionally, the new Petz Profile feature allows you to create profiles containing .pet files, along with their textures, palettes, and breedfiles, and even their favorite toyz and
+			clothes, all while maintaining their memories.
 		</p>
+		<h4>Getting Started</h4>
+		<ul>
+			<li>First click "Enable Content Profiles" to enable the feature.</li>
+			<li>
+				Next, go to the Create New Profile box. Enter the name you wish to call your new profile, and check the types of content you want to include in that profile. If don't know for sure yet
+				- don't worry. You can add or delete profile subfolders at any time. If the content type you want to include is grayed out, check that the "Disable" option in the the Loading Override
+				box is unchecked (Note: Some types of content may be disabled completely depending on the game version you load. If so, that means that type of content isn't compatible with that
+				game). When finished, click the "Create Profile" button, and the program will automatically generate the profile folders for you.
+			</li>
+			<li>
+				Note 1: When using Adopted Petz profiles, it is recommended that each pet only be included in one profile. Otherwise, it is possible that the latest version of the pet might be
+				overwritten
+			</li>
+			<li>Note 2: Some kinds of content - Carrying Cases, Mice, and AC Sprite - require an edited PetzRes.dll file to be used. See the XXXXX section for more info</li>
+			<li>
+				Once you've created your first profile, navigate to your EZLoader directory. Enter the "Filez" folder, then "ContentProfiles". You should see a folder with the same name as the profile
+				you just created. Copy the files you wish to be included in the profile into the same folder you would put them in the game (with the exception of Cases, ACSprites, and Mice, which
+				should be copied into their respective folders).
+			</li>
+			<li>
+				Go back to the EZLoader. New profiles should automatically get added to the Include Box, though if it's not there, you can click the "Refresh Folders" button to have the EZLoader scan
+				for folder changes and update the UI. All the profiles in the Include box will be copied into your game the next time you click "Save and Start Petz" (or start the EZLoader without
+				opening the settings menu). Try it now, and confirm that the game content you added to your new profile is now in your game.
+			</li>
+			<li>
+				Once you've confirmed this, close the game and open the EZLoader settings again. Now, select a profile in the Include box and click the right arrow button to move it to the Remove Box.
+				Start the game again, and the content in that profile will be gone!
+			</li>
+			<li>
+				If you wish to delete a profile, please either use the included delete feature, or ensure the profile is in the "Remove" section before you delete it. Otherwise, you will have to
+				remove the files from your game manually
+			</li>
+			<li>That covers the basics of the Content Profile system. For more advance tips, check out the <a href="#content-profile-full">full feature list.</a></li>
+		</ul>
+
+		<h3 id="qs-auto-swapping">Auto Swapping Setup</h3>
+
 		<p>
-			Once you have completed this initial setup, PetzEL will not open the settings menu and skip straight to loading the game unless the "Always Open Settings" option is checked. However, you
-			can always open the settings menu again by double clicking the "modify_setting.bat" file included in the installation directory.
+			The Petz EZLoader isn't just a content management system. It actually adds new features to the game! By checking your computer's date and time and automatically swapping out certain types
+			of game content such as playscenes before loading the game, it creates the illusion that Petz 3/4 and Babyz have real time, seasons, and weather.
 		</p>
-		<p>
-			In order for the PetzEL seasons feature to work properly, it is recommended that you alway use PetzEL to launch your game. If you'd like, you can create a shortcut to PetzEL and rename it
-			to whichever game version you're running, and change the icon to one of the included Petz icon files
-		</p>
-		<p>
-			If you wish to use PetzEL with more than one P.F. Magic game, you can have multiple installations on one computer, all configured to run different games. Just make sure the files being
-			loaded match the game version you're running!
-		</p>
+		<p>Note: Carrying Cases, Mice, and AC Sprite swapping require an edited PetzRes.dll file to be used. See the XXXXX section for more info.</p>
+
+		<h4>Getting Started</h4>
+		<ul>
+			<li>First, click "Enable Auto Swapping" to enable the feature.</li>
+			<li>
+				The Auto Swapping feature allows for 3 different types of swapping - Seasonal, Day/Night, and Weather. It also allows the swapping of 3 different kinds of content - Playscenes,
+				Carrying Cases, and Mice. These can all be mixed and matched to customize the system to work how you want.
+			</li>
+			<li>
+				To setup auto swapping, simply navigate to your EZLoader folder, then open the "Filez" folder. Within, you'll see 4 "Seasonal" folders, each with a number of subfolders - first season,
+				then time, then weather. Simply copy the OW content you want to be loaded for a particular combo into that folder.
+			</li>
+			<li>
+				Each type of swapping also has a default folder that you can set. If you don't enable a type of swapping for a particular piece of content, that's the folder that will be loaded
+				instead. For example, if you don't want to use weather with playscenes, and the default weather is set to "clear", the EZLoader will always load the content in the "clear" subfolder.
+				So if it's day time in the winter, it will load winter/day/clear. And at night, it will load winter/night/clear.
+			</li>
+			<li>
+				If a particular folder doesn't have an OW file for that combination, the behavior will change based on if you have Base Game Fallback enabled. If you do, it will simply load the
+				original game file. If not, it will load whichever file was last used in the game.
+			</li>
+			<li>
+				Carrying Cases have a special option - 24 hour mode. This is designed to replicate the PII carrying case, which had new art for the interior of the case for each hour of the day. To
+				use this option, copy your set of cases into the 24hour case folder in the SeasonalCase directory. Clicking this option disables the weather and seasons because I don't think anyone is
+				crazy enough to make a full set of art for every combination. If someone proves me wrong and does it, then I'll enable this feature.
+			</li>
+			<li>
+				This covers the basics of Auto Swapping. Each type of swapping also has some additional settings you can tweak it to match your personal preferences. Most of these should be self
+				explanatory, but if you need more help, check out the full features section.
+			</li>
+		</ul>
 
 		<hr />
 
-		<h3>Auto Scene Swapping Instructions</h3>
+		<h2>Feature Glossary</h2>
+
+		<p>Here you can find an in-depth explanation of all the various features of the EZLoader, for easy reference.</p>
+
+		<h3>Main Buttons</h3>
+		<p>Buttons that are visible on all tabs of the program</p>
+		<ul>
+			<li>Move Files - saves your settings, then moves the game files based on your current settings, but doesn't start the game</li>
+			<li>Save - saves your settings, but doesn't start the game</li>
+			<li>Save and Start Petz - saves your settings, moves the files, then starts the game (or opens the Content Profile Manager if that option is checked)</li>
+			<li>Help - opens this Help Guide</li>
+		</ul>
+
+		<h3>General Setting</h3>
+		<p>Setting that relate to both main features of the EZLoader program, or the program in general</p>
+		<h4>General</h4>
+		<ul>
+			<li>Game Source - The location of Petz or Babyz program that's being modified</li>
+			<li>Edit Source - allows you change the above info</li>
+			<li>Always Open Settings - when checked, opens the main settings window each time you launch the program</li>
+			<li>
+				Always Open Content Profile Manager - when checked, opens the Content Profile Manager window each time you launch the program. For more info, see the
+				<a href="#cprof-manager">Content Profile Manager</a> section
+			</li>
+		</ul>
+
+		<h4>Advanced Settings</h4>
+		<p>Settings you probably won't need, unless you're a power user or run into a problem</p>
+		<ul>
+			<li>Custom Load Order - changes the order that the two main EZLoader features are applied. Useful when dealing with OWs. In either case, the base game fallback applies first</li>
+			<li>
+				Disable Base Game Fallback - when checked, disables the base game fallback features. Useful if you for some reason don't want all the original game content in your game at all times
+				(in which case you'll have to manage replacing OW data yourself by creating profiles). Checking and unchecking it will refresh the basegameBackup folder in content profiles (useful if
+				you accidentally change that data), and it will be automatically disabled if it can't find the baseGameBackups folder when trying to load the backup data.
+			</li>
+			<li>Regenerate Folders - recreates the "Filez" folder structure with all the Seasonal subfolders</li>
+			<li>Reset Settings - resets all the setting to defaults</li>
+			<li>
+				Create debug.txt - creates a "debug.txt" file in all the Seasonal subfolders with the path of that particular file subfolder as the content. Useful for debugging which folder is being
+				loaded.
+			</li>
+			<li>Delete debug.txt - deletes the above generated "debug.txt" files in all the Seasonal subfolders. If any files are left in the game folders, you will need to delete them manually</li>
+		</ul>
+
+		<h3 id="fg-content-profile">Content Profile Settings</h3>
+		<p>Settings on this tab related to the Content Profiles feature, which allows you to move entire folders of game content in and out of your game with a single click</p>
+		<h4>General</h4>
+		<ul>
+			<li>Enable Content Profiles - toggles the entire feature</li>
+			<li>Sort Remove - Sorts the folders in the "Remove" box alphabetically</li>
+			<li>Refresh Folders - checks if any new folders have been created or removed in the Filez\ContentProfiles directory, and updates the UI accordingly</li>
+			<li>
+				Include Box - the contents of the folders in this box will be copied into your game the next time you hit "Move Files" or start the game (with the exception of Adopted Petz/Babyz,
+				which will only be copied if they aren't already there, in order to maintain the latest version). You can use the arrows to the left of the box to rearrange the order these folders are
+				loaded - folders on top will be loaded first. This can be useful for managing OWs.
+			</li>
+			<li>
+				Remove Box - the contents of the folders in this box will be deleted from your game (but not from your Filez folder) the next time you hit "Move Files" or start the game (except for
+				Adopted Petz/Babyz will be copied back into the folder in order to maintain the latest version).
+			</li>
+			<li>Arrow Buttons - the up and down arrows allow you to rearrange the contents of the Include Box. The left and right arrows allow you to move content between the two boxes</li>
+			<li>Filter Box - the include and remove boxes will filter their content based on what you type in this box. Useful for finding a specific folder.</li>
+		</ul>
+
+		<h4>Loading Override Settings</h4>
+		<p>
+			Allows you to enable or disable loading specific types of content. For performance reasons, it is recommended to only enable loading for the types of content you intend to swap. Note that
+			to swap Carrying Case, Mice, and AC Sprites, you will need to have an edited PetzRes.dll file (for more info <a href="">click here</a>). Also, these setting only apply to content within
+			the ContentProfiles folders. If you have swapping enabled for content in the AutoSwapping tab, it will continued to be swapped as normal
+		</p>
+
+		<ul>
+			<li>Disable Loading Resources - disables loading all content in the Petz/Resource subfolders</li>
+			<li>Disable Loading Adopted Petz - disables swapping Petz/Babyz in your Adopted Petz/Babyz folder</li>
+			<li>Disable Carrying Cases - disables loading custom carrying cases</li>
+			<li>Disable Mice - disables loading alternate mice lnz files</li>
+			<li>Disable Loading Resources - disables loading alternate Adoption Center sprites</li>
+		</ul>
+
+		<h4>Create New Profile</h4>
+		<p>
+			This section allows you to easily create a new content profile folder with whichever you want. Note that you can still create profile folders manually, as well as add or delete subfolders
+			at any time, including subfolders not listed as options. This is just a shortcut to enable you to quickly and easily create new profiles with the most common folder types.
+		</p>
+
+		<ul>
+			<li>
+				Name - the name you wish to give the new profile. If you type in the name of an existing profile, it will instead generate any additional subfolders you check for that folder (but not
+				delete the unchecked ones, to avoid accidentally deleting content)
+			</li>
+			<li>Various Checkboxes - allows you to pick which subfolders you want to be generated for the new profile</li>
+			<li>Clear Selection - unchecks all the checkboxes</li>
+			<li>Create Profile - creates the profile</li>
+		</ul>
+
+		<h4>Delete Profile</h4>
+		<p>
+			Enables you to delete a profile from both your game, and your Content Profile folder. Only use this if you've already backed up any content you wish to keep. To delete a profile, simply
+			select it from the drop down and click delete. You can also start typing in the drop down box to filter the selection. If you want to delete a profile without using the feature, please
+			make sure to move it to the "Remove" section and click "Move Files" first. Otherwise you will have to remove those files from your game manually.
+		</p>
+
+		<h4 id="cprof-manager">Content Profile Manager</h4>
+		<p>
+			The Content Profile Manager is a new windows that can be enabled, giving you a way to view and manage your Content Profiles each time you start you game, with even more room and filter
+			options. The functionality of this window is mostly the same as the content profiles tab, with the exception of the "Category Filters" section. This section will allow you to filter
+			profiles based of off what type of content they contain. Note that these filters will show any profiles that contain a folder for that type of content, regardless if that folder is empty.
+		</p>
+
+		<h3>Auto Swapping Settings</h3>
 
 		<p>
-			PetzEL isn't just a content management system. It actually adds new features to the game! By checking your computers date and time and automatically swapping out playscenes before loading
-			the game, it creates the illusion that Petz 3/4 and Babyz have real time seasons and weather.
-		</p>
-		<p>
-			Setting up this feature is easy. Simply copy the playscenes you wish to be used for each season, time of day, and weather type into the corresponding folder in the SeasonalArea directory
-			and PetzEL will handle the rest! If a folder is missing a copy of a particular scene, the game will load whichever version of that scene was last in the game, so it's not nessicary to fill
-			all the folders if you don't want.
-		</p>
-		<p>
-			Each of the 3 scene swapping features as has a number of configuration options. If you wish to only use some of the auto scene swapping features, you can use the "force" options to make
-			PetzEZLoader always use a particular folder. For seasons, you can tweak the start and end date of each season.
-		</p>
-		<p>
-			For time, you can set the sunrise and sunset times, and also choose whether you want to use to optional sunrise and sunset scenes. This will use scenes in the sunrise and sunset folders
-			during the sunrise and sunset hours, rather than switching directly to day or night.
-		</p>
-		<p>
-			Finally, the weather type has 3 different loading options. "Random on load" will select a random weather effect each time you load the game. "Random per day" will select a random weather
-			effect once per day, and load that weather effect each time you open the game. "Location based" will attempt to mirror the weather at the provided longitude and latitude coordinates via
-			the Open-Metero API. If you don't know your personal longitude and latitude coordinates, they can be found with a simple google search.
-		</p>
-		<p>
-			Now, this feature would be pretty useless without scenes to go with it, and thankfully the lovely ButterflyChaser has stepped up and has been hard at work creating a full set of scenes to
-			work with the EZLoader! These should be available for download at both <a href="https://oodlecat.meowandsparkle.party/alive-enough/">my site</a> and
-			<a href="https://butterflyfieldz.neocities.org/">ButterflyChaser's site</a>. It's also possible than in the future other people will decide to create EZLoader compatible scenes, so make
-			sure to check out my site for more details.
+			Settings on this tab relate to the Auto Swapping feature, which allows you to setup certain types of game content to automatically swap out based on the time and date of your computer's
+			clock and (optionally) weather data based on the entered coordinates.
 		</p>
 
-		<hr />
+		<h4>General</h4>
+		<ul>
+			<li>Enable Auto Swapping - toggles the entire feature</li>
+			<li>Default Season/Time/Weather - selects the folder that will be loaded if a particular type of content is not enabled for that type of swapping</li>
+			<li>Enable Playscene Swapping - enables playscene swapping for that type of auto swapping. Works with both base game and custom playscenes</li>
+			<li>Enable ACSprite Swapping - enable the swapping of externalized Adoption Center sprites, sometimes used with custom Adoption Center playscenes</li>
+			<li>Enable Case Swapping - enables the swapping of externalized Carrying Case sprites</li>
+			<li>Enable Mice Swapping - enables the swapping of externalized Mice lnz</li>
+		</ul>
 
-		<h3>Bulk Loading Instructions</h3>
+		<h4>Seasonal Options</h4>
+		<ul>
+			<li>Season Start Date - Selects the day of the year that the season changes. Can be tweaked to reflect how the seasons typically change in your area.</li>
+		</ul>
 
-		<p>
-			Have tons of custom Petz content to manage? Sick of having to copy files back and forth out of your game? Well, PetzEL is here to help! With bulk loading, PetzEL will enable you to add and
-			remove entire folders full of content from the Resource folder, all with the click of a button!
-		</p>
+		<h4>Day/Night Options</h4>
+		<ul>
+ 
+			<li>Sunrise/Sunset Times - Sets the time of day in which night switches into day, and day into night. Once again, this can be tweaked to match your local area</li>
+			<li>Enable unique sunrise/sunset swaps - allows you to use special playscenes for the hours in which sunrise and sunsets occur</li>
+			<li>Enable 24 hour case mode - enables a special 24 hour mode to allow you to use unique carrying case art for each hour of the day. Designed specifically to replicate the PII case.</li>
+		</ul>
 
-		<p>
-			To get started, create a new folder in the "Files" directory. Then, sort the files you want to add into their respective resource folders. PetzEL will default to including any new content
-			you add, so next time you start the game, the new files should be there.
-		</p>
+		<h4>Weather Options</h4>
+		<ul>
+			<li>Weather rotation style - Allows you to pick between 3 weather rotation styles
+				<ul>
+					<li>Random on load - picks a random weather each time the game loads</li>
+					<li>Random per day - picks a random weather the first time the game is loaded for the day, and keeps that weather for the whole day</li>
+					<li>Location based - uses the provided longitude and latitude info to check the current weather using the free Open-Meteo api. Requires internet access.</li>
+				</ul>
+			</li>
+			<li> Latitude/Longitude - the data used to lookup weather for a particular location. You can find these for your location with a simple google search. 
+		</ul>
 
-		<p>
-			To remove content, simply open up the PetzEL setting and move whichever folder you'd like to remove from the "Remove" section. PetzEL will then automatically remove the files in those
-			folders from your game directory.
-		</p>
+		<hr>
 
-		<p>
-			Note: if you wish to delete a folder in your PetzEL directory, make sure to mark it as Removed from within PetzEL first! Otherwise, you will have to remove the content from your game
-			manually, as PetzEL only removes files contained within the folders in its "Removed" section, and ignores all other files.
-		</p>
+		<h2>FAQ</h2>
 
-		<hr />
-
-		<h3>Tips and Tricks</h3>
-
-		<p>
-			Content is loaded in the following order: <br />
-			Seasonal Area > Remove Files > Included Files, in the order they are listed in the setting page
-		</p>
-
-		<p>
-			PetzEL supports OW breeds! However, if you remove a folder containing OW breeds, make sure you have a folder containing the original version of those breeds in the included files.
-			Otherwise, PetzEL won't know to replace the originals.
-		</p>
+		<ul>
+			<li>Where can I find EZLoader compatible scenes?
+			</li>
+			<li>There are a number of sites around the </li>
+		</ul>
 
 		<hr />
 
 		<h3>Info</h3>
 
 		<p>
-			README file version 2.0<br />
-			This software was created by skissors @ Alive Enough, with some help from Kyle T. <3 <br />
-			<a href="https://oodlecat.meowandsparkle.party/alive-enough/">https://oodlecat.meowandsparkle.party/alive-enough/</a>
+			README file version 3.0<br />
+			This software was created by skissors @ Alive Enough, with some help from Kyle T. <3
+			<br />
+			<a href="https://oodlecat.meowandsparkle.party/alive-enough/" target="_blank">https://oodlecat.meowandsparkle.party/alive-enough/</a>
 		</p>
 
 		<p>
 			Thanks to Open-Meteo for their free weather data <br />
-			<a href="https://open-meteo.com/">https://open-meteo.com/</a>
+			<a href="https://open-meteo.com/" target="_blank">https://open-meteo.com/</a>
 		</p>
 	</body>
 </html>

@@ -102,6 +102,7 @@
             label13 = new Label();
             btnGenerateDebug = new Button();
             tbContentProfiles = new TabPage();
+            btnSortRemove = new Button();
             gbLoadingOverride = new GroupBox();
             cbDisableLoadingCase = new CheckBox();
             cbDisableLoadingMice = new CheckBox();
@@ -147,6 +148,7 @@
             cbEnableWeatherCase = new CheckBox();
             cbEnableWeatherArea = new CheckBox();
             label19 = new Label();
+            btnMoveFiles = new Button();
             Credits.SuspendLayout();
             gbTimeOptions.SuspendLayout();
             tabControl1.SuspendLayout();
@@ -277,7 +279,7 @@
             label12.AutoSize = true;
             label12.Location = new Point(6, 79);
             label12.Name = "label12";
-            label12.Size = new Size(305, 15);
+            label12.Size = new Size(306, 15);
             label12.TabIndex = 19;
             label12.Text = "special thanks to ButterflyChaser, Queenie and Kyle T. <3";
             // 
@@ -299,7 +301,7 @@
             label9.Name = "label9";
             label9.Size = new Size(70, 15);
             label9.TabIndex = 1;
-            label9.Text = "version 3.3b";
+            label9.Text = "version 3.4b";
             // 
             // label8
             // 
@@ -537,9 +539,9 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(8, 136);
+            label2.Location = new Point(8, 142);
             label2.Name = "label2";
-            label2.Size = new Size(77, 15);
+            label2.Size = new Size(78, 15);
             label2.TabIndex = 5;
             label2.Text = "Sunrise Time:";
             // 
@@ -557,9 +559,9 @@
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(11, 171);
+            label7.Location = new Point(8, 171);
             label7.Name = "label7";
-            label7.Size = new Size(74, 15);
+            label7.Size = new Size(75, 15);
             label7.TabIndex = 5;
             label7.Text = "Sunset Time:";
             // 
@@ -722,7 +724,7 @@
             label17.AutoSize = true;
             label17.Location = new Point(8, 23);
             label17.Name = "label17";
-            label17.Size = new Size(114, 15);
+            label17.Size = new Size(115, 15);
             label17.TabIndex = 28;
             label17.Text = "Default Time of Day:";
             // 
@@ -917,6 +919,7 @@
             // 
             // tbContentProfiles
             // 
+            tbContentProfiles.Controls.Add(btnSortRemove);
             tbContentProfiles.Controls.Add(gbLoadingOverride);
             tbContentProfiles.Controls.Add(lNameFilter);
             tbContentProfiles.Controls.Add(bnRefreshFolders);
@@ -939,6 +942,16 @@
             tbContentProfiles.TabIndex = 2;
             tbContentProfiles.Text = "Content Profile Settings";
             tbContentProfiles.UseVisualStyleBackColor = true;
+            // 
+            // btnSortRemove
+            // 
+            btnSortRemove.Location = new Point(359, 7);
+            btnSortRemove.Name = "btnSortRemove";
+            btnSortRemove.Size = new Size(82, 23);
+            btnSortRemove.TabIndex = 26;
+            btnSortRemove.Text = "Sort Remove";
+            btnSortRemove.UseVisualStyleBackColor = true;
+            btnSortRemove.Click += btnSortRemove_Click;
             // 
             // gbLoadingOverride
             // 
@@ -1202,7 +1215,7 @@
             cbNpToyz.Location = new Point(73, 94);
             cbNpToyz.Margin = new Padding(2);
             cbNpToyz.Name = "cbNpToyz";
-            cbNpToyz.Size = new Size(49, 19);
+            cbNpToyz.Size = new Size(50, 19);
             cbNpToyz.TabIndex = 8;
             cbNpToyz.Text = "Toyz";
             cbNpToyz.UseVisualStyleBackColor = true;
@@ -1391,7 +1404,7 @@
             label21.AutoSize = true;
             label21.Location = new Point(5, 411);
             label21.Name = "label21";
-            label21.Size = new Size(468, 15);
+            label21.Size = new Size(469, 15);
             label21.TabIndex = 23;
             label21.Text = "Tip: Default selects the folder that will be loaded if that style of swapping is not enabled.\r\n";
             // 
@@ -1469,11 +1482,22 @@
             label19.TabIndex = 32;
             label19.Text = "Default Weather: ";
             // 
+            // btnMoveFiles
+            // 
+            btnMoveFiles.Location = new Point(287, 480);
+            btnMoveFiles.Name = "btnMoveFiles";
+            btnMoveFiles.Size = new Size(75, 23);
+            btnMoveFiles.TabIndex = 22;
+            btnMoveFiles.Text = "Move Files";
+            btnMoveFiles.UseVisualStyleBackColor = true;
+            btnMoveFiles.Click += btnMoveFiles_Click;
+            // 
             // FormSettings
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(587, 515);
+            Controls.Add(btnMoveFiles);
             Controls.Add(tabControl1);
             Controls.Add(btnSave);
             Controls.Add(btnStartPetz);
@@ -1627,5 +1651,7 @@
         private CheckBox cbEnableSeasonalAC;
         private CheckBox cbEnableTimeAC;
         private CheckBox cbEnableWeatherAC;
+        private Button btnSortRemove;
+        private Button btnMoveFiles;
     }
 }

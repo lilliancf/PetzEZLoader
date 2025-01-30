@@ -2,6 +2,7 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
 using PetzEasyLoaderGUI.Properties;
 using System;
+using System.Collections.Immutable;
 using System.Configuration;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -273,7 +274,7 @@ namespace PetzEasyLoaderGUI
                 cbNpCatz.Enabled = false;
                 cbNpDogz.Enabled = false;
                 cbNpToyz.Enabled = false;
-                cbNpWallpaper.Enabled = false; 
+                cbNpWallpaper.Enabled = false;
             }
             else if (config.gameVersion.Equals("Petz 5.exe"))
             {
@@ -939,7 +940,7 @@ namespace PetzEasyLoaderGUI
                     DirectoryInfo newProfile = new DirectoryInfo(Path.Combine(Program.fileSource, "ContentProfiles", newProfileName));
                     newProfile.Create();
 
-                    if (cbNpAdoptedPetz.Checked)  newProfile.CreateSubdirectory(config.gameVersion.Equals("Babyz.exe") ? "Adopted Babyz" : "Adopted Petz");
+                    if (cbNpAdoptedPetz.Checked) newProfile.CreateSubdirectory(config.gameVersion.Equals("Babyz.exe") ? "Adopted Babyz" : "Adopted Petz");
                     if (cbNpACSprites.Checked) newProfile.CreateSubdirectory("ACSprites");
                     if (cbNpCase.Checked) newProfile.CreateSubdirectory("CarryingCase");
                     if (cbNpMice.Checked) newProfile.CreateSubdirectory("Mice");
@@ -1100,6 +1101,18 @@ namespace PetzEasyLoaderGUI
             MessageBox.Show("No backup folder for " + version + "found, disabling base game fallback", "Info");
             config.disableBaseGameFallback = true;
             cbDisableFallback.Checked = true;
+        }
+
+        private void btnMoveFiles_Click(object sender, EventArgs e)
+        {
+            saveSettings();
+            Program.startLoading(false);
+        }
+
+        private void btnSortRemove_Click(object sender, EventArgs e)
+        {
+            config.exclude.Sort();
+            lbNotIncluded.DataSource = new List<string>(config.exclude);
         }
     }
 }

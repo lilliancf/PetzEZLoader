@@ -190,7 +190,7 @@
             cbToyz.Location = new Point(5, 136);
             cbToyz.Margin = new Padding(2);
             cbToyz.Name = "cbToyz";
-            cbToyz.Size = new Size(49, 19);
+            cbToyz.Size = new Size(50, 19);
             cbToyz.TabIndex = 35;
             cbToyz.Text = "Toyz";
             cbToyz.UseVisualStyleBackColor = true;

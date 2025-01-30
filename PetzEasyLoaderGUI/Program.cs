@@ -73,23 +73,32 @@ namespace PetzEasyLoaderGUI
             }
             if (!loaded) loadIniFile(fileSource);
 
+            ApplicationConfiguration.Initialize();
 
             if (showSettings || (args.Length > 0 && args[0] == "settings") || config.alwaysShowSettings
                 || string.IsNullOrEmpty(config.petzDir) || string.IsNullOrEmpty(config.gameVersion))
             {
                 startPetz = false;
-                ApplicationConfiguration.Initialize();
                 Application.Run(new FormSettings(config));
             }
-            if (config.openContProfForum) Application.Run(new FormContentProfiles(config));
+            if (config.openContProfForum)
+            {
+                startPetz = false;
+                Application.Run(new FormContentProfiles(config));
+            }
             if (startPetz)
             {
-                startLoading();
+                startLoading(true);
             }
         }
 
-        static void startLoading()
+        public static void startLoading(bool startPetz)
         {
+            if (string.IsNullOrEmpty(config.petzDir))
+            {
+                MessageBox.Show("Please set a Petz or Babyz game directory first", "Error");
+                return;
+            }
             //first remove files to remove
             if (config.contentProfilesEnabled) contentProfiles.removeExcludedFiles();
 
@@ -108,11 +117,15 @@ namespace PetzEasyLoaderGUI
                 if (config.contentProfilesEnabled) contentProfiles.addIncludedFiles();
             }
 
-            try { Process.Start(Path.Combine(config.petzDir, config.gameVersion)); }
-            catch {
-                MessageBox.Show("Cannot launch Petz. The selected Petz or Babyz .exe is invalid, or some other error occured" +
-                                "\n\nTip: If your Petz exe is set to run as administrator, make sure you're also running PetzEZLoader as administrator", "Error");
-            }
+            if (startPetz)
+            {
+                try { Process.Start(Path.Combine(config.petzDir, config.gameVersion)); }
+                catch
+                {
+                    MessageBox.Show("Cannot launch Petz. The selected Petz or Babyz .exe is invalid, or some other error occured" +
+                                    "\n\nTip: If your Petz exe is set to run as administrator, make sure you're also running PetzEZLoader as administrator", "Error");
+                }
+            } 
         }
 
         static void loadIniFile(string loadPath)

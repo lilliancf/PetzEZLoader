@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace PetzEasyLoaderGUI
 {
@@ -23,11 +24,16 @@ namespace PetzEasyLoaderGUI
 
         public FormContentProfiles(configProperties p)
         {
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+
             config = p;
             InitializeComponent();
-
+                       
             lbIncluded.DataSource = new List<string>(config.include);
             lbNotIncluded.DataSource = new List<string>(config.exclude);
+
+            lbIncluded.BringToFront();
 
             buildSubfolderList();
 

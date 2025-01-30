@@ -8,12 +8,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>PetzEZLoader</AssemblyName>
     <ForceDesignerDPIUnaware>true</ForceDesignerDPIUnaware>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="readme.html" />
     <None Remove="Resources\petz14.png" />
     <None Remove="Resources\petz5.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="favicon.ico" />
   </ItemGroup>
 
   <ItemGroup>
